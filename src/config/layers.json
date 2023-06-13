@@ -1,0 +1,7 @@
+{
+  "layers": [
+    { "name": "Input", "num_nodes": 5, "activation_function": "linear" },
+    { "name": "Hidden", "num_nodes": 3, "activation_function": "relu" },
+    { "name": "Output", "num_nodes": 2, "activation_function": "linear" }
+  ]
+}
