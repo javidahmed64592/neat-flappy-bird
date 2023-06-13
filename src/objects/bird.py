@@ -1,4 +1,3 @@
-import json
 from __main__ import data, nn_data
 import numpy as np
 from typing import List
