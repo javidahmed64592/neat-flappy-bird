@@ -20,10 +20,6 @@ from objects.bird import Bird
 from objects.pipe import Pipe
 
 
-avg_score_history = []
-num_alive_at_max = []
-
-
 class App:
     """
     This class creates a Pygame instance and runs the application. The screen dimensions are
@@ -144,11 +140,6 @@ class App:
                 self.population.num_alive == 0
                 or self.population.best_member.score == data["max_score"]
             ):
-                avg_score_history.append(self.population.avg_score)
-                num_alive_at_max.append(
-                    self.population.num_alive_with_max_score(data["max_score"])
-                )
-
                 self.population.evaluate()
                 self.pipes = []
                 self.pipe_current_speed = data["pipe"]["start_speed"]
