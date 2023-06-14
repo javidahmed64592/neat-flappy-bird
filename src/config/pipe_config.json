@@ -1,0 +1,9 @@
+{
+  "start_spawnrate": 80.9,
+  "min_spawnrate": 35,
+  "acc_spawnrate": 0.1,
+  "start_speed": 3.5,
+  "max_speed": 11,
+  "acc_speed": 0.03,
+  "spacing": 220
+}

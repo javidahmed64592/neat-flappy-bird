@@ -1,0 +1,14 @@
+{
+  "name": "Flappy Bird with Neuroevolution",
+  "screen": {
+    "width": 700,
+    "height": 700
+  },
+
+  "fps": 60,
+
+  "font": {
+    "font": "freesansbold.ttf",
+    "size": 28
+  }
+}

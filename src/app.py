@@ -1,21 +1,15 @@
 import sys
-import os
-import json
+from os import path
 import pygame
 from pygame.locals import *
 
-with open(
-    os.path.join(os.path.dirname(__file__), "config", "config.json"), "r"
-) as file:
-    data = json.load(file)
+wd = path.realpath(path.dirname(__file__))
+from utils.config_utils import load_configs
 
-with open(
-    os.path.join(os.path.dirname(__file__), "config", "layers.json"), "r"
-) as file:
-    nn_data = json.load(file)
+config_names = ["game", "ga", "nn", "bird", "pipe"]
+config = load_configs(config_names)
 
 from models.ga import Population
-
 from objects.bird import Bird
 from objects.pipe import Pipe
 
@@ -29,8 +23,10 @@ class App:
     """
 
     pygame.init()
-    FONT = pygame.font.SysFont(data["font"]["font"], data["font"]["size"])
-    FPS = data["fps"]
+    FONT = pygame.font.SysFont(
+        config["game"]["font"]["font"], config["game"]["font"]["size"]
+    )
+    FPS = config["game"]["fps"]
     FramePerSec = pygame.time.Clock()
 
     def __init__(self, width: int, height: int, name: str):
@@ -56,8 +52,8 @@ class App:
 
         # Pipe configuration
         self.pipes = []
-        self.pipe_current_spawnrate = data["pipe"]["start_spawnrate"]
-        self.pipe_current_speed = data["pipe"]["start_speed"]
+        self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
+        self.pipe_current_speed = config["pipe"]["start_speed"]
 
     def create_population(
         self,
@@ -112,10 +108,14 @@ class App:
         """
         self.write_text(f"Generation: {self.population.generation}", 0, 0)
         self.write_text(
-            f"Birds alive: {self.population.num_alive}", 0, data["font"]["size"]
+            f"Birds alive: {self.population.num_alive}",
+            0,
+            config["game"]["font"]["size"],
         )
         self.write_text(
-            f"Score: {self.population.best_member.score}", 0, data["font"]["size"] * 2
+            f"Score: {self.population.best_member.score}",
+            0,
+            config["game"]["font"]["size"] * 2,
         )
 
     def run(self):
@@ -138,24 +138,26 @@ class App:
             # Game logic goes here
             if (
                 self.population.num_alive == 0
-                or self.population.best_member.score == data["max_score"]
+                or self.population.best_member.score == config["ga"]["max_score"]
             ):
                 self.population.evaluate()
                 self.pipes = []
-                self.pipe_current_speed = data["pipe"]["start_speed"]
-                self.pipe_current_spawnrate = data["pipe"]["start_spawnrate"]
+                self.pipe_current_speed = config["pipe"]["start_speed"]
+                self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
 
             if self.count % int(self.pipe_current_spawnrate) == 0:
                 self.pipes.append(
-                    Pipe(spacing=data["pipe"]["spacing"], speed=self.pipe_current_speed)
+                    Pipe(
+                        spacing=config["pipe"]["spacing"], speed=self.pipe_current_speed
+                    )
                 )
                 self.pipe_current_speed = min(
-                    self.pipe_current_speed + data["pipe"]["acc_speed"],
-                    data["pipe"]["max_speed"],
+                    self.pipe_current_speed + config["pipe"]["acc_speed"],
+                    config["pipe"]["max_speed"],
                 )
                 self.pipe_current_spawnrate = max(
-                    self.pipe_current_spawnrate - data["pipe"]["acc_spawnrate"],
-                    data["pipe"]["min_spawnrate"],
+                    self.pipe_current_spawnrate - config["pipe"]["acc_spawnrate"],
+                    config["pipe"]["min_spawnrate"],
                 )
                 self.count = 1
 
@@ -177,14 +179,14 @@ class App:
 
 if __name__ == "__main__":
     app = App(
-        width=data["screen"]["width"],
-        height=data["screen"]["height"],
-        name=data["name"],
+        width=config["game"]["screen"]["width"],
+        height=config["game"]["screen"]["height"],
+        name=config["game"]["name"],
     )
     app.create_population(
-        population_size=data["population_size"],
-        mutation_rate=data["mutation_rate"],
-        x=data["bird"]["x"],
-        y=data["bird"]["y"],
+        population_size=config["ga"]["population_size"],
+        mutation_rate=config["ga"]["mutation_rate"],
+        x=config["bird"]["x"],
+        y=config["bird"]["y"],
     )
     app.run()

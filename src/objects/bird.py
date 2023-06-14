@@ -1,4 +1,4 @@
-from __main__ import data, nn_data
+from __main__ import config
 import numpy as np
 from typing import List
 import pygame
@@ -23,9 +23,9 @@ class Bird:
     incremented by 1 each time the update() method is called.
     """
 
-    GRAV = data["bird"]["grav"]
-    LIFT = data["bird"]["lift"]
-    MIN_VELOCITY = data["bird"]["min_velocity"]
+    GRAV = config["bird"]["grav"]
+    LIFT = config["bird"]["lift"]
+    MIN_VELOCITY = config["bird"]["min_velocity"]
 
     def __init__(self, x: float, y: float, width: float, height: float):
         """
@@ -53,7 +53,7 @@ class Bird:
         self.screen_height = self.screen.get_size()[1]
 
         self.nn = NeuralNetwork(
-            nn_data["layers"],
+            config["nn"]["layers"],
         )
 
     def reset(self):

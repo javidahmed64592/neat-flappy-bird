@@ -1,0 +1,9 @@
+{
+  "x": 30,
+  "y": 400,
+  "width": 40,
+  "height": 40,
+  "grav": 1,
+  "lift": -20,
+  "min_velocity": -10
+}
