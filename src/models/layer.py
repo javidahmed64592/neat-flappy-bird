@@ -31,6 +31,7 @@ class Layer:
 
     def set_values(self, values):
         self.values = Matrix.column_matrix(values)
+        self.values = Matrix.map(self.values, self.activation_function)
 
     def feedforward(self, values):
         self.values = self.weights * Matrix.column_matrix(values) + self.bias

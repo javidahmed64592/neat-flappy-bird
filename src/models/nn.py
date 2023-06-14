@@ -3,17 +3,37 @@ from models.layer import Layer
 
 
 class NeuralNetwork:
-    def __init__(self, layer_config):
+    def __init__(self, nn_config):
         self.layers = [
             Layer(
-                name=layer["name"],
-                num_nodes=layer["num_nodes"],
-                activation_function_name=layer["activation_function"],
+                name=nn_config["input_layer"]["name"],
+                num_nodes=nn_config["input_layer"]["num_nodes"],
+                activation_function_name=nn_config["input_layer"][
+                    "activation_function"
+                ],
             )
-            for layer in layer_config
         ]
 
-        for layer_index in range(1, len(self.layers)):
+        for layer in nn_config["hidden_layers"]:
+            self.layers.append(
+                Layer(
+                    name=layer["name"],
+                    num_nodes=layer["num_nodes"],
+                    activation_function_name=layer["activation_function"],
+                )
+            )
+
+        self.layers.append(
+            Layer(
+                name=nn_config["output_layer"]["name"],
+                num_nodes=nn_config["output_layer"]["num_nodes"],
+                activation_function_name=nn_config["output_layer"][
+                    "activation_function"
+                ],
+            ),
+        )
+
+        for layer_index in range(len(self.layers)):
             self.layers[layer_index].generate_activation_function()
             self.layers[layer_index].generate_weights(
                 self.layers[layer_index - 1].num_nodes

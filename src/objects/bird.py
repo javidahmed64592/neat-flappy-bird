@@ -53,7 +53,7 @@ class Bird:
         self.screen_height = self.screen.get_size()[1]
 
         self.nn = NeuralNetwork(
-            config["nn"]["layers"],
+            config["nn"],
         )
 
     def reset(self):

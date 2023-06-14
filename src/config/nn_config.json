@@ -1,8 +1,18 @@
 {
-  "layers": [
-    { "name": "Input", "num_nodes": 5, "activation_function": "linear" },
-    { "name": "Hidden", "num_nodes": 3, "activation_function": "relu" },
-    { "name": "Output", "num_nodes": 2, "activation_function": "linear" }
+  "input_layer": {
+    "name": "Input",
+    "num_nodes": 5,
+    "activation_function": "linear"
+  },
+
+  "output_layer": {
+    "name": "Output",
+    "num_nodes": 2,
+    "activation_function": "linear"
+  },
+
+  "hidden_layers": [
+    { "name": "Hidden", "num_nodes": 3, "activation_function": "relu" }
   ],
 
   "weights_range": {
