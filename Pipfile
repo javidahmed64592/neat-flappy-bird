@@ -9,6 +9,8 @@ mypy = "*"
 flake8 = "*"
 pygame = "*"
 numpy = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
