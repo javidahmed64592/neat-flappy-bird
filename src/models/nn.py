@@ -65,7 +65,6 @@ class NeuralNetwork:
         )
 
         for layer_index in range(len(layers)):
-            layers[layer_index].generate_activation()
             layers[layer_index].generate_weights(layers[layer_index - 1].num_nodes)
 
         return cls(layers)

@@ -2,6 +2,7 @@ import math
 import numpy as np
 from typing import List
 from models.matrix import Matrix
+from models.activation_functions import activation_functions
 
 
 class Layer:
@@ -35,7 +36,7 @@ class Layer:
         """
         self.name = name
         self.num_nodes = num_nodes
-        self.activation_name = activation
+        self.activation = activation_functions[activation]
         self.weights_range = weights_range
         self.bias_range = bias_range
 
@@ -53,7 +54,6 @@ class Layer:
             (Layer): Layer with assigned node values
         """
         layer = cls(name, len(values), activation)
-        layer.generate_activation()
         layer.set_values(values)
         return layer
 
@@ -67,16 +67,6 @@ class Layer:
         """
         self.weights = Matrix.random_matrix(self.num_nodes, cols, self.weights_range[0], self.weights_range[1])
         self.bias = Matrix.random_matrix(self.num_nodes, 1, self.bias_range[0], self.bias_range[1])
-
-    def generate_activation(self) -> None:
-        """
-        Assign activation function for layer.
-        """
-        linear = lambda x: x
-        relu = lambda x: x * (x > 0)
-        sigmoid = lambda x: (1 / (1 + math.exp(-x)))
-        functions = {"linear": linear, "relu": relu, "sigmoid": sigmoid}
-        self.activation = functions[self.activation_name]
 
     def set_values(self, values: np.ndarray) -> None:
         """
