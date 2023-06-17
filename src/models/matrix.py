@@ -25,7 +25,7 @@ class Matrix:
         """
         if isinstance(elements, (float)):
             self.matrix = np.ones((rows, cols)) * elements
-        elif isinstance(elements, (List[float], np.ndarray, Matrix)):  # type: ignore
+        elif isinstance(elements, (list, np.ndarray, Matrix)):
             elements_to_reshape = elements.matrix if isinstance(elements, (Matrix)) else np.array(elements)
             try:
                 self.matrix = np.matrix.reshape(elements_to_reshape, (rows, cols))  # type: ignore
