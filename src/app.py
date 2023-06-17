@@ -23,7 +23,7 @@ class App:
 
     def __init__(self, width: int, height: int, name: str):
         """
-        Configure the game window and the pipes.
+        Configure the game window.
 
         Parameters:
             width (int): Width of game window
@@ -40,10 +40,25 @@ class App:
         # Counter to track game time
         self.count = 0
 
-        # Pipe configuration
-        self.pipes: List[Pipe] = []
-        self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
-        self.pipe_current_speed = config["pipe"]["start_speed"]
+    @classmethod
+    def create_app(cls, width: int, height: int, name: str):
+        """
+        Create application and configure population and pipes.
+
+        Parameters:
+            width (int): Width of game window
+            height (int): Height of game window
+            name (str): Name of game window
+        """
+        app = cls(width, height, name)
+        app.create_population(
+            population_size=config["ga"]["population_size"],
+            mutation_rate=config["ga"]["mutation_rate"],
+            x=config["bird"]["x"],
+            y=config["bird"]["y"],
+        )
+        app.create_pipes()
+        return app
 
     def create_population(
         self,
@@ -75,6 +90,14 @@ class App:
             self.birds.append(Bird(x, y, width, height))
 
         self.population = Population(self.birds, mutation_rate)
+
+    def create_pipes(self):
+        """
+        Create list for pipes and set spawnrate and speed.
+        """
+        self.pipes: List[Pipe] = []
+        self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
+        self.pipe_current_speed = config["pipe"]["start_speed"]
 
     def write_text(self, text: str, x: float, y: float) -> None:
         """
@@ -160,15 +183,10 @@ class App:
 
 
 if __name__ == "__main__":
-    app = App(
+    app = App.create_app(
         width=config["game"]["screen"]["width"],
         height=config["game"]["screen"]["height"],
         name=config["game"]["name"],
     )
-    app.create_population(
-        population_size=config["ga"]["population_size"],
-        mutation_rate=config["ga"]["mutation_rate"],
-        x=config["bird"]["x"],
-        y=config["bird"]["y"],
-    )
+
     app.run()
