@@ -1,4 +1,5 @@
 import math
+import numpy as np
 from typing import List
 from models.matrix import Matrix
 
@@ -39,7 +40,7 @@ class Layer:
         self.bias_range = bias_range
 
     @classmethod
-    def input_layer(cls, name: str, values: List[float], activation: str) -> "Layer":
+    def input_layer(cls, name: str, values: np.ndarray, activation: str) -> "Layer":
         """
         Generate input layer with list of values.
 
@@ -64,12 +65,8 @@ class Layer:
         Parameters:
             cols (int): Number of columns for weights matrix
         """
-        self.weights = Matrix.random_matrix(
-            self.num_nodes, cols, self.weights_range[0], self.weights_range[1]
-        )
-        self.bias = Matrix.random_matrix(
-            self.num_nodes, 1, self.bias_range[0], self.bias_range[1]
-        )
+        self.weights = Matrix.random_matrix(self.num_nodes, cols, self.weights_range[0], self.weights_range[1])
+        self.bias = Matrix.random_matrix(self.num_nodes, 1, self.bias_range[0], self.bias_range[1])
 
     def generate_activation(self) -> None:
         """
@@ -81,7 +78,7 @@ class Layer:
         functions = {"linear": linear, "relu": relu, "sigmoid": sigmoid}
         self.activation = functions[self.activation_name]
 
-    def set_values(self, values: List[float]) -> None:
+    def set_values(self, values: np.ndarray) -> None:
         """
         Set node values.
 
@@ -91,7 +88,7 @@ class Layer:
         self.values = Matrix.column_matrix(values)
         self.values = Matrix.map(self.values, self.activation)
 
-    def feedforward(self, values: List[float]) -> None:
+    def feedforward(self, values: np.ndarray) -> None:
         """
         Calculate node values using the feedforward algorithm.
 
@@ -104,14 +101,12 @@ class Layer:
         Shape: (N_(i), 1) = (N_(i), N_(i-1)) x (N_(i-1), 1) + (N_(i), 1)
 
         Parameters:
-            values (List[float]): Node values from previous layer
+            values (np.ndarray): Node values from previous layer
         """
         self.values = self.weights * Matrix.column_matrix(values) + self.bias
         self.values = Matrix.map(self.values, self.activation)
 
-    def crossover(
-        self, layer: "Layer", other_layer: "Layer", mutation_rate: float
-    ) -> None:
+    def crossover(self, layer: "Layer", other_layer: "Layer", mutation_rate: float) -> None:
         """
         Generate new weights and bias matrices using two layers.
 

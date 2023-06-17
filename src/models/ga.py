@@ -1,5 +1,5 @@
 import numpy as np
-from typing import List
+from typing import List, Optional
 
 from objects.bird import Bird
 
@@ -27,13 +27,15 @@ class Population:
         self.mutation_rate = mutation_rate
         self.generation = 1
         self.max_fitness = 0
-        self.max_fitness_history = []
 
     @property
     def best_member(self) -> Bird:
         """
         Return the member with the highest fitness in the population, or return first member if
         there is no best member yet i.e. as soon as application starts.
+
+        Returns:
+            best_member (Bird): Bird with highest fitness or first one in population
         """
         best_member = None
         best_fitness = 0
@@ -52,6 +54,9 @@ class Population:
     def num_alive(self) -> int:
         """
         Return the number of members in the population which are alive.
+
+        Returns:
+            num_alive (int): Number of members alive in population
         """
         num_alive = 0
         for member in self.population:
@@ -59,33 +64,7 @@ class Population:
 
         return num_alive
 
-    @property
-    def avg_score(self) -> float:
-        """
-        Return the average score of the population.
-        """
-        sum = 0
-
-        for member in self.population:
-            sum += member.score
-
-        return sum / len(self.population)
-
-    def num_alive_with_max_score(self, max_score: int) -> int:
-        """
-        Return number of members that achieved a max score.
-
-        Parameters:
-            max_score (int): Threshold for member's score
-        """
-        sum = 0
-
-        for member in self.population:
-            sum += member.score == max_score
-
-        return sum
-
-    def evaluate(self):
+    def evaluate(self) -> None:
         """
         Calculate the fitness of each member in the population. Then, use the fitnesses of each
         member to select parents to pass their genes on to the next generation via crossover and
@@ -93,23 +72,18 @@ class Population:
         them to their starting conditions i.e. reset their positions.
         """
         self.max_fitness = self.best_member.fitness
-        self.max_fitness_history.append(self.max_fitness)
 
         for member in self.population:
             parentA = None
             parentB = None
 
             while parentA is None:
-                potential_parent = self.population[
-                    np.random.randint(len(self.population))
-                ]
+                potential_parent = self.population[np.random.randint(len(self.population))]
                 if potential_parent != member:
                     parentA = self.select_parent(potential_parent)
 
             while parentB is None:
-                potential_parent = self.population[
-                    np.random.randint(len(self.population))
-                ]
+                potential_parent = self.population[np.random.randint(len(self.population))]
                 if potential_parent != parentA and potential_parent != member:
                     parentB = self.select_parent(potential_parent)
 
@@ -121,7 +95,7 @@ class Population:
 
         self.generation += 1
 
-    def select_parent(self, parent: Bird) -> Bird:
+    def select_parent(self, parent: Bird) -> Optional[Bird]:
         """
         Use Rejection Sampling to select a parent.
 
@@ -129,7 +103,7 @@ class Population:
             parent (Bird): Member of population, potential parent for child
 
         Returns:
-            parent(Bird): Member of population if passed Rejection Sampling
+            parent(Optional(Bird)): Member of population if passed Rejection Sampling
         """
         if np.random.uniform(0, 1) < parent.fitness / self.max_fitness:
             return parent

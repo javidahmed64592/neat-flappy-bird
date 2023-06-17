@@ -1,5 +1,5 @@
 import numpy as np
-from typing import List
+from typing import Union, List, Any
 
 
 class Matrix:
@@ -14,40 +14,30 @@ class Matrix:
     crossover and activation functions etc.
     """
 
-    def __init__(
-        self,
-        rows: int,
-        cols: int,
-        elements: 'int | float | np.ndarray | list | "Matrix"',
-    ):
+    def __init__(self, rows: int, cols: int, elements: Union[float, np.ndarray, List[float], "Matrix"]):
         """
         Create a matrix of specified shape using provided elements.
 
         Parameters:
             rows (int): Number of rows in matrix
             cols (int): Number of columns in matrix
-            elements (int | float | np.ndarray | list | Matrix): Matrix elements to use
+            elements (float | np.ndarray | List(float) | "Matrix"): Matrix elements to use
         """
-        if isinstance(elements, (int, float)):
+        if isinstance(elements, (float)):
             self.matrix = np.ones((rows, cols)) * elements
-        elif isinstance(elements, (list, np.ndarray, Matrix)):
-            elements_to_reshape = (
-                elements.matrix if isinstance(elements, Matrix) else np.array(elements)
-            )
+        elif isinstance(elements, (List[float], np.ndarray, Matrix)):  # type: ignore
+            elements_to_reshape = elements.matrix if isinstance(elements, (Matrix)) else np.array(elements)
             try:
-                self.matrix = np.matrix.reshape(elements_to_reshape, (rows, cols))
+                self.matrix = np.matrix.reshape(elements_to_reshape, (rows, cols))  # type: ignore
                 if self.matrix.dtype not in ["float64", "int32"]:
-                    raise TypeError(
-                        "All provided elements in array must be of type int or float."
-                    )
+                    raise TypeError("All provided elements in array must be of type int or float.")
             except ValueError:
                 raise ValueError(
-                    f"Number of elements must be compatible with provided shape.\n{rows} rows, {cols} columns, expected {rows * cols} elements, got {np.size(elements_to_reshape)}."
+                    f"Number of elements must be compatible with provided shape.\n{rows} rows, {cols} columns, \
+                    expected {rows * cols} elements, got {np.size(elements_to_reshape)}."
                 )
         else:
-            raise TypeError(
-                "Provided elements must be of type int, float, list, or NumPy array."
-            )
+            raise TypeError("Provided elements must be of type int, float, list, or NumPy array.")
 
     def __str__(self) -> str:
         """
@@ -61,77 +51,79 @@ class Matrix:
         """
         return f"Matrix({self.matrix.shape[0]}, {self.matrix.shape[1]}, {self.matrix})"
 
-    def __add__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __add__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         Add a scalar/matrix to matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to add to matrix
+            other (float | Matrix): Scalar/matrix to add to matrix
         """
         if isinstance(other, Matrix):
             try:
                 new_matrix = self.matrix + other.matrix
             except ValueError:
                 raise ValueError(
-                    f"Matrices must have same shape (trying to add {self.matrix.shape[0]} and {other.matrix.shape[0]} rows, and {self.matrix.shape[1]} and {other.matrix.shape[1]} columns)."
+                    f"Matrices must have same shape (trying to add {self.matrix.shape[0]} and {other.matrix.shape[0]} \
+                    rows, and {self.matrix.shape[1]} and {other.matrix.shape[1]} columns)."
                 )
-        elif isinstance(other, (int, float)):
+        elif isinstance(other, (float)):
             new_matrix = self.matrix + other
 
         return Matrix(self.matrix.shape[0], self.matrix.shape[1], new_matrix)
 
-    def __iadd__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __iadd__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         In-place addition of matrix and scalar/matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to add to matrix
+            other (float | Matrix): Scalar/matrix to add to matrix
         """
         return self + other
 
-    def __radd__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __radd__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         Reverse addition of matrix and scalar/matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to add to matrix
+            other (float | Matrix): Scalar/matrix to add to matrix
         """
         return self + other
 
-    def __sub__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __sub__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         Subtract a scalar/matrix from matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to subtract from matrix
+            other (float | Matrix): Scalar/matrix to subtract from matrix
         """
         if isinstance(other, Matrix):
             try:
                 new_matrix = self.matrix - other.matrix
             except ValueError:
                 raise ValueError(
-                    f"Matrices must have same shape (trying to subtract {self.matrix.shape[0]} and {other.matrix.shape[0]} rows, and {self.matrix.shape[1]} and {other.matrix.shape[1]} columns)."
+                    f"Matrices must have same shape (trying to subtract {self.matrix.shape[0]} and \
+                    {other.matrix.shape[0]} rows, and {self.matrix.shape[1]} and {other.matrix.shape[1]} columns)."
                 )
-        elif isinstance(other, (int, float)):
+        elif isinstance(other, (float)):
             new_matrix = self.matrix - other
 
         return Matrix(self.matrix.shape[0], self.matrix.shape[1], new_matrix)
 
-    def __isub__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __isub__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         In-place subtraction of matrix and scalar/matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to subtract from matrix
+            other (float | Matrix): Scalar/matrix to subtract from matrix
         """
         return self - other
 
-    def __rsub__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __rsub__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         Reverse subtraction of matrix and scalar/matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to subtract from matrix
+            other (float | Matrix): Scalar/matrix to subtract from matrix
         """
         return self - other
 
@@ -142,57 +134,54 @@ class Matrix:
         new_matrix = self.matrix * (-1)
         return Matrix(self.matrix.shape[0], self.matrix.shape[1], new_matrix)
 
-    def __mul__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __mul__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         Multiply matrix and scalar/matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to subtract from matrix
+            other (float | Matrix): Scalar/matrix to subtract from matrix
         """
         if isinstance(other, Matrix):
             try:
                 new_matrix = np.matmul(self.matrix, other.matrix)
-                new_matrix_object = Matrix(
-                    self.matrix.shape[0], other.matrix.shape[1], new_matrix
-                )
+                new_matrix_object = Matrix(self.matrix.shape[0], other.matrix.shape[1], new_matrix)
             except ValueError:
                 raise ValueError(
-                    f"Number of columns in first matrix must be equal to number of rows in second matrix (first matrix has {self.matrix.shape[1]} columns and second matrix has {other.matrix.shape[0]} rows."
+                    f"Number of columns in first matrix must be equal to number of rows in second matrix (first matrix \
+                    has {self.matrix.shape[1]} columns and second matrix has {other.matrix.shape[0]} rows."
                 )
-        elif isinstance(other, (int, float)):
+        elif isinstance(other, (float)):
             new_matrix = self.matrix * other
-            new_matrix_object = Matrix(
-                self.matrix.shape[0], self.matrix.shape[1], new_matrix
-            )
+            new_matrix_object = Matrix(self.matrix.shape[0], self.matrix.shape[1], new_matrix)
 
         return new_matrix_object
 
-    def __imul__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __imul__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         In-place multiplication of matrix and scalar/matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to multiply matrix
+            other (float | Matrix): Scalar/matrix to multiply matrix
         """
         return self * other
 
-    def __rmul__(self, other: 'int | float | "Matrix"') -> "Matrix":
+    def __rmul__(self, other: Union[float, "Matrix"]) -> "Matrix":
         """
         Reverse multiplication of matrix and scalar/matrix.
 
         Parameters:
-            other (int, float, Matrix): Scalar/matrix to multiply matrix
+            other (float | Matrix): Scalar/matrix to multiply matrix
         """
         return self * other
 
-    def __truediv__(self, other: "int | float") -> "Matrix":
+    def __truediv__(self, other: float) -> "Matrix":
         """
         Divide matrix by scalar.
 
         Parameters:
-            other (int, float): Scalar to divide matrix
+            other (float): Scalar to divide matrix
         """
-        if isinstance(other, (int, float)):
+        if isinstance(other, (float)):
             try:
                 new_matrix = self.matrix / other
             except ZeroDivisionError:
@@ -202,40 +191,45 @@ class Matrix:
         else:
             raise ValueError("Matrix can only be divided by a scalar.")
 
-    def __idiv__(self, other: "int | float") -> "Matrix":
+    def __idiv__(self, other: float) -> "Matrix":
         """
         In-place division of matrix and scalar.
 
         Parameters:
-            other (int, float): Scalar to divide matrix
+            other (float): Scalar to divide matrix
         """
         return self / other
 
-    def to_array(self) -> "List[int] | List[float]":
+    def to_array(self) -> np.ndarray:
         """
-        Return matrix as list.
+        Return matrix as array.
 
         Returns:
-            arr (List(int | float)): List of matrix elements
+            arr (np.ndarray): Array of matrix elements
         """
         arr = np.reshape(self.matrix, self.no_of_elements)
-        arr = list(arr)
         return arr
 
     @property
     def no_of_elements(self) -> int:
         """
         Return the number of elements in the matrix.
+
+        Returns:
+            (int): Number of elements
         """
         return self.matrix.shape[0] * self.matrix.shape[1]
 
     @classmethod
-    def column_matrix(cls, arr: List[float]) -> "Matrix":
+    def column_matrix(cls, arr: np.ndarray) -> "Matrix":
         """
         Return a column matrix with provided elements.
 
         Parameters:
-            arr (List(float)): List of elements to be in matrix
+            arr (np.ndarray): List of elements to be in matrix
+
+        Returns:
+            (Matrix): Column matrix with given elements
         """
         return cls(len(arr), 1, arr)
 
@@ -249,6 +243,9 @@ class Matrix:
             cols (int): Number of columns in matrix
             low (float): Lower limit for random element
             high (float): Upper limit for random element
+
+        Returns:
+            (Matrix): Matrix with randomised elements
         """
         elements = [np.random.uniform(low, high) for _ in range(rows * cols)]
         return cls(rows, cols, elements)
@@ -261,6 +258,9 @@ class Matrix:
         Parameters:
             rows (int): Number of rows in matrix
             cols (int): Number of columns in matrix
+
+        Returns:
+            (Matrix): Matrix with all zeros
         """
         return cls(rows, cols, 0)
 
@@ -283,6 +283,9 @@ class Matrix:
             mutation_rate (float): Probability for element to be random, range [0, 1]
             low (float): Lower limit for random element
             high (float): Upper limit for random element
+
+        Returns:
+            (Matrix): Mixed matrix from provided matrices
         """
         matrix_elements = Matrix.to_array(matrix)
         other_matrix_elements = Matrix.to_array(other_matrix)
@@ -301,7 +304,7 @@ class Matrix:
         return cls(matrix.matrix.shape[0], matrix.matrix.shape[1], elements)
 
     @classmethod
-    def map(cls, matrix: "Matrix", map_function) -> "Matrix":
+    def map(cls, matrix: "Matrix", map_function: Any) -> "Matrix":
         """
         Map all elements in matrix using a mapping function.
 
@@ -309,6 +312,4 @@ class Matrix:
             matrix (Matrix): Matrix elements to map to new matrix
             map_function: Mathematical function f(x)
         """
-        return cls(
-            matrix.matrix.shape[0], matrix.matrix.shape[1], map_function(matrix.matrix)
-        )
+        return cls(matrix.matrix.shape[0], matrix.matrix.shape[1], map_function(matrix.matrix))

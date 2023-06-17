@@ -42,7 +42,7 @@ class NeuralNetwork:
         layers = [
             Layer.input_layer(
                 name=nn_config["input_layer"]["name"],
-                values=[0] * nn_config["input_layer"]["num_nodes"],
+                values=np.array([0] * nn_config["input_layer"]["num_nodes"]),
                 activation=nn_config["input_layer"]["activation"],
             )
         ]
@@ -70,7 +70,7 @@ class NeuralNetwork:
 
         return cls(layers)
 
-    def feedforward(self, input_array: np.ndarray) -> List[float]:
+    def feedforward(self, input_array: np.ndarray) -> np.ndarray:
         """
         Take a list of input values and pass them through the layers of the neural network to
         calculate a list of outputs.
@@ -83,15 +83,11 @@ class NeuralNetwork:
         """
         self.layers[0].set_values(input_array)
         for layer_index in range(1, len(self.layers)):
-            self.layers[layer_index].feedforward(
-                Matrix.to_array(self.layers[layer_index - 1].values)
-            )
+            self.layers[layer_index].feedforward(Matrix.to_array(self.layers[layer_index - 1].values))
 
         return Matrix.to_array(self.layers[-1].values)
 
-    def crossover(
-        self, nn: "NeuralNetwork", other_nn: "NeuralNetwork", mutation_rate: float
-    ) -> None:
+    def crossover(self, nn: "NeuralNetwork", other_nn: "NeuralNetwork", mutation_rate: float) -> None:
         """
         Crossover the weights and biases of two neural networks. Each element has a chance to be
         random, determined by mutation_rate.
@@ -102,9 +98,7 @@ class NeuralNetwork:
             mutation_rate (float): Probability for random mutation, range [0, 1]
         """
         for layer_index in range(1, len(self.layers)):
-            self.layers[layer_index].crossover(
-                nn.layers[layer_index], other_nn.layers[layer_index], mutation_rate
-            )
+            self.layers[layer_index].crossover(nn.layers[layer_index], other_nn.layers[layer_index], mutation_rate)
 
         for layer_index in range(1, len(self.layers)):
             self.layers[layer_index].apply()

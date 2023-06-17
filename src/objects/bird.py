@@ -56,7 +56,7 @@ class Bird:
             config["nn"],
         )
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Reset bird's position, velocity and alive state to starting conditions.
         """
@@ -65,25 +65,25 @@ class Bird:
         self.count = 0
         self.alive = True
 
-    def kill(self):
+    def kill(self) -> None:
         """
         Set bird's alive state to false.
         """
         self.alive = False
 
-    def draw(self):
+    def draw(self) -> None:
         """
         Draw bird on the display.
         """
         pygame.draw.rect(self.screen, self.color, self.rect)
 
-    def jump(self):
+    def jump(self) -> None:
         """
         Make bird 'jump' by accelerating upwards.
         """
         self.velocity += self.LIFT
 
-    def update(self, pipes: List[Pipe]):
+    def update(self, pipes: List[Pipe]) -> None:
         """
         Perform physics calculations on bird, check for collisions with pipe and update bird
         accordingly.
@@ -108,9 +108,7 @@ class Bird:
 
         nearest_pipe = Pipe.get_closest_pipe(pipes, self.x)
         if nearest_pipe is not None:
-            if self.rect.colliderect(nearest_pipe.rect_top) or self.rect.colliderect(
-                nearest_pipe.rect_bot
-            ):
+            if self.rect.colliderect(nearest_pipe.rect_top) or self.rect.colliderect(nearest_pipe.rect_bot):
                 self.kill()
                 return
             else:
@@ -118,7 +116,7 @@ class Bird:
                 inputs[3] = nearest_pipe.bottom / self.screen_height
                 inputs[4] = nearest_pipe.x / self.screen_width
 
-        output = self.nn.feedforward(inputs)
+        output = self.nn.feedforward(np.array(inputs))
 
         if output[0] > output[1]:
             self.jump()
@@ -131,7 +129,7 @@ class Bird:
         self.draw()
         self.count += 1
 
-    def crossover(self, parentA: "Bird", parentB: "Bird", mutation_rate: float):
+    def crossover(self, parentA: "Bird", parentB: "Bird", mutation_rate: float) -> None:
         """
         Crossover the brains of two birds to mix their neural network weights and biases.
 
@@ -142,7 +140,7 @@ class Bird:
         """
         self.nn.crossover(parentA.nn, parentB.nn, mutation_rate)
 
-    def apply(self):
+    def apply(self) -> None:
         """
         Overwrite bird's brain with new brain generated from crossover.
         """
@@ -152,6 +150,9 @@ class Bird:
     def score(self) -> int:
         """
         Return the bird's count after normalisation.
+
+        Returns:
+            (int): Bird's count after normalisation
         """
         return int(self.count / 60)
 
@@ -159,5 +160,8 @@ class Bird:
     def fitness(self) -> int:
         """
         Return the square of bird's score.
+
+        Returns:
+            (int): score squared
         """
         return (self.score) ** 2

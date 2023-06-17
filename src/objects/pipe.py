@@ -1,5 +1,5 @@
 import numpy as np
-from typing import List
+from typing import List, Optional
 import pygame
 
 
@@ -33,32 +33,28 @@ class Pipe:
             (4 / 5) * (self.screen.get_size()[1] - self.spacing),
         )
         self.bottom = self.screen.get_size()[1] - (self.top + self.spacing)
-        self.x = self.screen.get_size()[0]
+        self.x = float(self.screen.get_size()[0])
         self.width = width
         self.speed = speed
         self.rect_top = pygame.Rect(self.x, 0, self.width, self.top)
-        self.rect_bot = pygame.Rect(
-            self.x, self.top + self.spacing, self.width, self.bottom
-        )
+        self.rect_bot = pygame.Rect(self.x, self.top + self.spacing, self.width, self.bottom)
         self.color = (0, 255, 0)
 
-    def draw(self):
+    def draw(self) -> None:
         """
         Draw the pipes on the display.
         """
         pygame.draw.rect(self.screen, self.color, self.rect_top)
         pygame.draw.rect(self.screen, self.color, self.rect_bot)
 
-    def update(self):
+    def update(self) -> None:
         """
         Move the pipes along the screen.
         """
         self.x -= self.speed
 
         self.rect_top = pygame.Rect(self.x, 0, self.width, self.top)
-        self.rect_bot = pygame.Rect(
-            self.x, self.top + self.spacing, self.width, self.bottom
-        )
+        self.rect_bot = pygame.Rect(self.x, self.top + self.spacing, self.width, self.bottom)
 
         self.draw()
 
@@ -66,11 +62,14 @@ class Pipe:
     def offscreen(self) -> bool:
         """
         Return whether or not the pipes have moved off the screen.
+
+        Returns:
+            (bool): Is pipe off screen?
         """
         return self.x < -self.width
 
     @staticmethod
-    def get_closest_pipe(pipes: List["Pipe"], bird_pos_x: float) -> "Pipe":
+    def get_closest_pipe(pipes: List["Pipe"], bird_pos_x: float) -> Optional["Pipe"]:
         """
         Determine which pipe pair is closest to and in front of the birds.
 
