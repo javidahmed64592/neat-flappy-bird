@@ -1,8 +1,9 @@
 from os import path
+from pathlib import Path
 import json
 from typing import List, Dict, Any
-from __main__ import wd
 
+wd = Path(path.realpath(path.dirname(__file__))).parent
 config_folder = path.join(wd, "config")
 
 

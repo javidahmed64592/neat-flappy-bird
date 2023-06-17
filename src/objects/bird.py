@@ -1,10 +1,8 @@
-from __main__ import config
 import numpy as np
 from typing import List
 import pygame
-
 from objects.pipe import Pipe
-
+from config.config import config
 from models.nn import NeuralNetwork
 
 

@@ -1,17 +1,11 @@
 import sys
-from os import path
+from typing import List
 import pygame
-from pygame.locals import *
-
-wd = path.realpath(path.dirname(__file__))
-from utils.config_utils import load_configs
-
-config_names = ["game", "ga", "nn", "bird", "pipe"]
-config = load_configs(config_names)
-
+from pygame.locals import QUIT
 from models.ga import Population
 from objects.bird import Bird
 from objects.pipe import Pipe
+from config.config import config
 
 
 class App:
@@ -23,9 +17,7 @@ class App:
     """
 
     pygame.init()
-    FONT = pygame.font.SysFont(
-        config["game"]["font"]["font"], config["game"]["font"]["size"]
-    )
+    FONT = pygame.font.SysFont(config["game"]["font"]["font"], config["game"]["font"]["size"])
     FPS = config["game"]["fps"]
     FramePerSec = pygame.time.Clock()
 
@@ -42,16 +34,14 @@ class App:
         self.screen_width = width
         self.screen_height = height
 
-        self.display_surf = pygame.display.set_mode(
-            (self.screen_width, self.screen_height)
-        )
+        self.display_surf = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption(name)
 
         # Counter to track game time
         self.count = 0
 
         # Pipe configuration
-        self.pipes = []
+        self.pipes: List[Pipe] = []
         self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
         self.pipe_current_speed = config["pipe"]["start_speed"]
 
@@ -63,7 +53,7 @@ class App:
         y: float,
         width: float = 40,
         height: float = 40,
-    ):
+    ) -> None:
         """
         Create the population of members which will learn to play the game. The population size
         corresponds to the number of members in the population, and mutation rate corresponds to
@@ -80,14 +70,13 @@ class App:
             width (float): Width of bird
             height (float): Height of bird
         """
-        # Bird configuration
         self.birds = []
         for _ in range(population_size):
             self.birds.append(Bird(x, y, width, height))
 
         self.population = Population(self.birds, mutation_rate)
 
-    def write_text(self, text: str, x: float, y: float):
+    def write_text(self, text: str, x: float, y: float) -> None:
         """
         Write text to the screen at the given position.
 
@@ -99,7 +88,7 @@ class App:
         text_to_write = self.FONT.render(text, False, (255, 255, 255))
         self.display_surf.blit(text_to_write, (x, y))
 
-    def display_stats(self):
+    def display_stats(self) -> None:
         """
         Display statistics to the screen using the above helper function.
 
@@ -118,7 +107,7 @@ class App:
             config["game"]["font"]["size"] * 2,
         )
 
-    def run(self):
+    def run(self) -> None:
         """
         Run the application and handle events.
 
@@ -136,21 +125,14 @@ class App:
             self.display_surf.fill((0, 0, 0))
 
             # Game logic goes here
-            if (
-                self.population.num_alive == 0
-                or self.population.best_member.score == config["ga"]["max_score"]
-            ):
+            if self.population.num_alive == 0 or self.population.best_member.score == config["ga"]["max_score"]:
                 self.population.evaluate()
                 self.pipes = []
                 self.pipe_current_speed = config["pipe"]["start_speed"]
                 self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
 
             if self.count % int(self.pipe_current_spawnrate) == 0:
-                self.pipes.append(
-                    Pipe(
-                        spacing=config["pipe"]["spacing"], speed=self.pipe_current_speed
-                    )
-                )
+                self.pipes.append(Pipe(spacing=config["pipe"]["spacing"], speed=self.pipe_current_speed))
                 self.pipe_current_speed = min(
                     self.pipe_current_speed + config["pipe"]["acc_speed"],
                     config["pipe"]["max_speed"],
