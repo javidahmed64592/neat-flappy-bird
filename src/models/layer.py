@@ -1,7 +1,7 @@
 import numpy as np
 from typing import List
 from models.matrix import Matrix
-from models.activation_functions import activation_functions
+from models.activation_functions import ActivationFunctions
 
 
 class Layer:
@@ -35,7 +35,7 @@ class Layer:
         """
         self.name = name
         self.num_nodes = num_nodes
-        self.activation = activation_functions[activation]
+        self.activation = ActivationFunctions.get_activation(activation)
         self.weights_range = weights_range
         self.bias_range = bias_range
 

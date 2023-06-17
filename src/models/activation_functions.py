@@ -1,43 +1,61 @@
 import math
+from typing import Any
 
 
-def sigmoid(x: float) -> float:
-    """
-    Sigmoid activation function.
+class ActivationFunctions:
+    @staticmethod
+    def get_activation(name: str) -> Any:
+        """
+        Return activation function from name.
 
-    Parameters:
-        x (float): Element to use
+        Parameters:
+            name (str): Name of activation function
 
-    Returns:
-        (float): 1 / (1 + e^(-x))
-    """
-    return 1 / (1 + math.exp(-x))
+        Returns:
+            (Any): Activation function
+        """
+        activation_functions = {
+            "linear": ActivationFunctions.linear,
+            "relu": ActivationFunctions.relu,
+            "sigmoid": ActivationFunctions.sigmoid,
+        }
+        return activation_functions[name]
 
+    @staticmethod
+    def sigmoid(x: float) -> float:
+        """
+        Sigmoid activation function.
 
-def relu(x: float) -> float:
-    """
-    ReLU activation function.
+        Parameters:
+            x (float): Element to use
 
-    Parameters:
-        x (float): Element to use
+        Returns:
+            (float): 1 / (1 + e^(-x))
+        """
+        return 1 / (1 + math.exp(-x))
 
-    Returns:
-        (float): x if x > 0 else 0
-    """
-    return x * (x > 0)
+    @staticmethod
+    def relu(x: float) -> float:
+        """
+        ReLU activation function.
 
+        Parameters:
+            x (float): Element to use
 
-def linear(x: float) -> float:
-    """
-    Linear activation function.
+        Returns:
+            (float): x if x > 0 else 0
+        """
+        return x * (x > 0)
 
-    Parameters:
-        x (float): Element to use
+    @staticmethod
+    def linear(x: float) -> float:
+        """
+        Linear activation function.
 
-    Returns:
-        (float): x
-    """
-    return x
+        Parameters:
+            x (float): Element to use
 
-
-activation_functions = {"linear": linear, "relu": relu, "sigmoid": sigmoid}
+        Returns:
+            (float): x
+        """
+        return x
