@@ -1,4 +1,4 @@
-from os import path
+import os
 from pathlib import Path
 import json
 from typing import List, Dict, Any
@@ -11,7 +11,7 @@ def get_wd() -> Path:
     Returns:
         (Path): Path to app.py
     """
-    return Path(path.realpath(path.dirname(__file__))).parent
+    return Path(os.path.realpath(os.path.dirname(__file__))).parent
 
 
 def get_config_folder() -> Path:
@@ -64,6 +64,6 @@ def load_configs(config_names: List[str]) -> Dict[str, Any]:
     config_folder = get_config_folder()
 
     for name in config_names:
-        config_values.append(load_json(path.join(config_folder, f"{name}_config.json")))
+        config_values.append(load_json(os.path.join(config_folder, f"{name}_config.json")))
 
     return parse_configs(config_names, config_values)
