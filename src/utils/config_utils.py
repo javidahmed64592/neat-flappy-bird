@@ -3,8 +3,26 @@ from pathlib import Path
 import json
 from typing import List, Dict, Any
 
-wd = Path(path.realpath(path.dirname(__file__))).parent
-config_folder = path.join(wd, "config")
+
+def get_wd() -> Path:
+    """
+    Returns path to app.py
+
+    Returns:
+        (Path): Path to app.py
+    """
+    return Path(path.realpath(path.dirname(__file__))).parent
+
+
+def get_config_folder() -> Path:
+    """
+    Returns path to config folder.
+
+    Returns:
+        (Path): Path to config folder
+    """
+    wd = get_wd()
+    return Path.joinpath(wd, "config")
 
 
 def parse_configs(config_names: List[str], config_values: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -43,6 +61,7 @@ def load_configs(config_names: List[str]) -> Dict[str, Any]:
         (Dict(str, Any)): Dictionary of config names and settings
     """
     config_values = []
+    config_folder = get_config_folder()
 
     for name in config_names:
         config_values.append(load_json(path.join(config_folder, f"{name}_config.json")))
