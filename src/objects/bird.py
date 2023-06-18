@@ -1,8 +1,7 @@
 import numpy as np
-from typing import List
+from typing import List, Dict, Any
 import pygame
 from objects.pipe import Pipe
-from config.config import config
 from models.nn import NeuralNetwork
 
 
@@ -21,10 +20,6 @@ class Bird:
     incremented by 1 each time the update() method is called.
     """
 
-    GRAV = config["bird"]["grav"]
-    LIFT = config["bird"]["lift"]
-    MIN_VELOCITY = config["bird"]["min_velocity"]
-
     def __init__(self, x: float, y: float, width: float, height: float):
         """
         Initialise bird with a starting position, a width and a height.
@@ -35,24 +30,40 @@ class Bird:
             width (float): Width of bird
             height (float): Height of bird
         """
-        self.screen = pygame.display.get_surface()
+        self.x = x
+        self.y = y
         self.width = width
         self.height = height
-        self.x = x
-        self.start_y = y
-        self.y = y
-        self.velocity = 0
-        self.alive = True
-        self.count = 0
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.color = tuple(np.random.randint(low=0, high=256, size=(1, 3)))
 
-        self.screen_width = self.screen.get_size()[0]
-        self.screen_height = self.screen.get_size()[1]
+    @classmethod
+    def create(cls, config_bird: Dict[str, Any], config_nn: Dict[str, Any]) -> "Bird":
+        """
+        Create a bird from config files.
 
-        self.nn = NeuralNetwork.initialise_neural_network(
-            config["nn"],
+        Parameters:
+            config_bird (Dict(str, Any)): Bird configuration
+            config_nn (Dict(str, Any)): Neural network configuration
+        """
+        bird = cls(config_bird["x"], config_bird["y"], config_bird["width"], config_bird["height"])
+        bird.GRAV = config_bird["grav"]
+        bird.LIFT = config_bird["lift"]
+        bird.MIN_VELOCITY = config_bird["min_velocity"]
+        bird.screen = pygame.display.get_surface()
+        bird.start_y = config_bird["y"]
+        bird.velocity = 0
+        bird.alive = True
+        bird.count = 0
+        bird.rect = pygame.Rect(config_bird["x"], config_bird["y"], config_bird["width"], config_bird["height"])
+        bird.color = tuple(np.random.randint(low=0, high=256, size=(1, 3)))
+
+        bird.screen_width = bird.screen.get_size()[0]
+        bird.screen_height = bird.screen.get_size()[1]
+
+        bird.nn = NeuralNetwork.initialise_neural_network(
+            config_nn,
         )
+
+        return bird
 
     def reset(self) -> None:
         """
