@@ -1,7 +1,5 @@
 import numpy as np
-from typing import List, Optional
-
-from objects.bird import Bird
+from typing import List, Any, Optional
 
 
 class Population:
@@ -14,13 +12,13 @@ class Population:
     starting conditions ready for the next generation.
     """
 
-    def __init__(self, population: List[Bird], mutation_rate: float = 0.05):
+    def __init__(self, population: List[Any], mutation_rate: float = 0.05):
         """
         Initialise the population. A list of members is provided along with a mutation rate which
         corresponds to the probability the genes of each member will mutate.
 
         Parameters:
-            population (List(Bird)): List of members in the population
+            population (List(Any)): List of members in the population
             mutation_rate (float): Probability for members' genes to mutate, range [0, 1]
         """
         self.population = population
@@ -29,13 +27,13 @@ class Population:
         self.max_fitness = 0
 
     @property
-    def best_member(self) -> Bird:
+    def best_member(self) -> Any:
         """
         Return the member with the highest fitness in the population, or return first member if
         there is no best member yet i.e. as soon as application starts.
 
         Returns:
-            best_member (Bird): Bird with highest fitness or first one in population
+            best_member (Any): Member with highest fitness or first one in population
         """
         best_member = None
         best_fitness = 0
@@ -95,15 +93,15 @@ class Population:
 
         self.generation += 1
 
-    def select_parent(self, parent: Bird) -> Optional[Bird]:
+    def select_parent(self, parent: Any) -> Optional[Any]:
         """
         Use Rejection Sampling to select a parent.
 
         Parameters:
-            parent (Bird): Member of population, potential parent for child
+            parent (Any): Member of population, potential parent for child
 
         Returns:
-            parent(Optional(Bird)): Member of population if passed Rejection Sampling
+            parent(Optional(Any)): Member of population if passed Rejection Sampling
         """
         if np.random.uniform(0, 1) < parent.fitness / self.max_fitness:
             return parent
