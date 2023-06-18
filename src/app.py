@@ -5,7 +5,10 @@ from pygame.locals import QUIT
 from models.ga import Population
 from objects.bird import Bird
 from objects.pipe import Pipe
-from config.config import config
+from utils.config_utils import load_configs
+
+config_names = ["game", "ga", "nn", "bird", "pipe"]
+config = load_configs(config_names)
 
 
 class App:
@@ -54,8 +57,6 @@ class App:
         app.create_population(
             population_size=config["ga"]["population_size"],
             mutation_rate=config["ga"]["mutation_rate"],
-            x=config["bird"]["x"],
-            y=config["bird"]["y"],
         )
         app.create_pipes()
         return app
@@ -64,10 +65,6 @@ class App:
         self,
         population_size: int,
         mutation_rate: float,
-        x: float,
-        y: float,
-        width: float = 40,
-        height: float = 40,
     ) -> None:
         """
         Create the population of members which will learn to play the game. The population size
@@ -80,14 +77,10 @@ class App:
         Parameters:
             population_size (int): Number of members in the population
             mutation_rate (float): Probability for members' genes to mutate, range [0, 1]
-            x (float): x coordinate of bird's start position
-            y (float): y coordinate of bird's start position
-            width (float): Width of bird
-            height (float): Height of bird
         """
         self.birds = []
         for _ in range(population_size):
-            self.birds.append(Bird(x, y, width, height))
+            self.birds.append(Bird.create(config["bird"], config["nn"]))
 
         self.population = Population(self.birds, mutation_rate)
 
