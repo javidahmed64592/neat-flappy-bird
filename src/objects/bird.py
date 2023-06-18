@@ -43,6 +43,9 @@ class Bird:
         Parameters:
             config_bird (Dict(str, Any)): Bird configuration
             config_nn (Dict(str, Any)): Neural network configuration
+
+        Returns:
+            (Bird): Configured bird with neural network
         """
         bird = cls(config_bird["x"], config_bird["y"], config_bird["width"], config_bird["height"])
         bird.GRAV = config_bird["grav"]
