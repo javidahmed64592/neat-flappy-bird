@@ -148,7 +148,7 @@ class App:
                 self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
 
             if self.count % int(self.pipe_current_spawnrate) == 0:
-                self.pipes.append(Pipe(spacing=config["pipe"]["spacing"], speed=self.pipe_current_speed))
+                self.pipes.append(Pipe.create(config_pipe=config["pipe"], speed=self.pipe_current_speed))
                 self.pipe_current_speed = min(
                     self.pipe_current_speed + config["pipe"]["acc_speed"],
                     config["pipe"]["max_speed"],

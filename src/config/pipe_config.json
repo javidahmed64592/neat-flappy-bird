@@ -5,5 +5,6 @@
   "start_speed": 3.5,
   "max_speed": 11,
   "acc_speed": 0.03,
+  "width": 50,
   "spacing": 220
 }
