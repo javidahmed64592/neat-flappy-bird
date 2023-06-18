@@ -29,7 +29,7 @@ def parse_configs(config_names: List[str], config_values: List[Dict[str, Any]]) 
     """Parse config files into dictionary form for easier indexing.
 
     Arguments:
-        config_names (List[str]): List of config file names
+        config_names (List(str)): List of config file names
         config_values (Dict(str, Any)): Config settings
 
     Returns:
