@@ -123,6 +123,35 @@ class App:
             config["game"]["font"]["size"] * 2,
         )
 
+    def update(self) -> None:
+        """ """
+        if self.population.num_alive == 0 or self.population.best_member.score == config["ga"]["max_score"]:
+            self.population.evaluate()
+            self.pipes = []
+            self.pipe_current_speed = config["pipe"]["start_speed"]
+            self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
+
+        if self.count % int(self.pipe_current_spawnrate) == 0:
+            self.pipes.append(Pipe.create(config_pipe=config["pipe"], speed=self.pipe_current_speed))
+            self.pipe_current_speed = min(
+                self.pipe_current_speed + config["pipe"]["acc_speed"],
+                config["pipe"]["max_speed"],
+            )
+            self.pipe_current_spawnrate = max(
+                self.pipe_current_spawnrate - config["pipe"]["acc_spawnrate"],
+                config["pipe"]["min_spawnrate"],
+            )
+            self.count = 1
+
+        for pipe in self.pipes:
+            if pipe.offscreen:
+                self.pipes.remove(pipe)
+            else:
+                pipe.update()
+
+        for bird in self.population.population:
+            bird.update(self.pipes)
+
     def run(self) -> None:
         """
         Run the application and handle events.
@@ -140,33 +169,7 @@ class App:
 
             self.display_surf.fill((0, 0, 0))
 
-            # Game logic goes here
-            if self.population.num_alive == 0 or self.population.best_member.score == config["ga"]["max_score"]:
-                self.population.evaluate()
-                self.pipes = []
-                self.pipe_current_speed = config["pipe"]["start_speed"]
-                self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
-
-            if self.count % int(self.pipe_current_spawnrate) == 0:
-                self.pipes.append(Pipe.create(config_pipe=config["pipe"], speed=self.pipe_current_speed))
-                self.pipe_current_speed = min(
-                    self.pipe_current_speed + config["pipe"]["acc_speed"],
-                    config["pipe"]["max_speed"],
-                )
-                self.pipe_current_spawnrate = max(
-                    self.pipe_current_spawnrate - config["pipe"]["acc_spawnrate"],
-                    config["pipe"]["min_spawnrate"],
-                )
-                self.count = 1
-
-            for pipe in self.pipes:
-                if pipe.offscreen:
-                    self.pipes.remove(pipe)
-                else:
-                    pipe.update()
-
-            for bird in self.population.population:
-                bird.update(self.pipes)
+            self.update()
 
             # Updating the Pygame window
             self.display_stats()
@@ -175,7 +178,10 @@ class App:
             self.count += 1
 
 
-if __name__ == "__main__":
+def run_app():
+    """
+    Run application.
+    """
     app = App.create_app(
         width=config["game"]["screen"]["width"],
         height=config["game"]["screen"]["height"],
