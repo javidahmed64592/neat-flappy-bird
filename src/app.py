@@ -2,10 +2,10 @@ import sys
 from typing import List
 import pygame
 from pygame.locals import QUIT
-from models.ga import Population
-from objects.bird import Bird
-from objects.pipe import Pipe
-from utils.config_utils import load_configs
+from src.models.ga import Population
+from src.objects.bird import Bird
+from src.objects.pipe import Pipe
+from src.utils.config_utils import load_configs
 
 config_names = ["game", "ga", "nn", "bird", "pipe"]
 config = load_configs(config_names)

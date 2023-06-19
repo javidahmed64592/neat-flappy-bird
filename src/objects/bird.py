@@ -1,8 +1,9 @@
 import numpy as np
 from typing import List, Dict, Any
 import pygame
-from objects.pipe import Pipe
-from models.nn import NeuralNetwork
+from src.objects.pipe import Pipe
+from src.models.nn import NeuralNetwork
+from src.utils.pipe_utils import get_closest_pipe
 
 
 class Bird:
@@ -118,7 +119,7 @@ class Bird:
             0,
         ]
 
-        nearest_pipe = Pipe.get_closest_pipe(pipes, self.x)
+        nearest_pipe = get_closest_pipe(pipes, self.x)
         if nearest_pipe is not None:
             if self.rect.colliderect(nearest_pipe.rect_top) or self.rect.colliderect(nearest_pipe.rect_bot):
                 self.kill()

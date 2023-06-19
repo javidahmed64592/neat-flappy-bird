@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 import numpy as np
-from models.matrix import Matrix
-from models.layer import Layer
+from src.models.matrix import Matrix
+from src.models.layer import Layer
 
 
 class NeuralNetwork:

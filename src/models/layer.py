@@ -1,7 +1,7 @@
 import numpy as np
 from typing import List
-from models.matrix import Matrix
-from models.activation_functions import ActivationFunctions
+from src.models.matrix import Matrix
+from src.models.activation_functions import ActivationFunctions
 
 
 class Layer:
