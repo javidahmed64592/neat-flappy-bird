@@ -107,7 +107,7 @@ class Bird:
         if not self.alive:
             return
 
-        if self.y > self.screen_height - self.height or self.y < 0:
+        if self.offscreen:
             self.kill()
             return
 
@@ -121,7 +121,7 @@ class Bird:
 
         nearest_pipe = get_closest_pipe(pipes, self.x)
         if nearest_pipe is not None:
-            if self.rect.colliderect(nearest_pipe.rect_top) or self.rect.colliderect(nearest_pipe.rect_bot):
+            if self.collide_with_pipe(nearest_pipe):
                 self.kill()
                 return
             else:
@@ -142,6 +142,18 @@ class Bird:
         self.draw()
         self.count += 1
 
+    def collide_with_pipe(self, pipe: Pipe) -> bool:
+        """
+        Check if bird is colliding with a pipe.
+
+        Parameters:
+            pipe (Pipe): Pipe to check collision against
+
+        Returns:
+            (bool): Is bird colliding with pipe?
+        """
+        return self.rect.colliderect(pipe.rect_top) or self.rect.colliderect(pipe.rect_bot)
+
     def crossover(self, parentA: "Bird", parentB: "Bird", mutation_rate: float) -> None:
         """
         Crossover the brains of two birds to mix their neural network weights and biases.
@@ -158,6 +170,16 @@ class Bird:
         Overwrite bird's brain with new brain generated from crossover.
         """
         self.nn.apply()
+
+    @property
+    def offscreen(self) -> bool:
+        """
+        Returns if bird is offscreen.
+
+        Returns:
+            (bool): Is bird offscreen?
+        """
+        return self.y > self.screen_height - self.height or self.y < 0
 
     @property
     def score(self) -> int:
