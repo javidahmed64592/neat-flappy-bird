@@ -17,15 +17,11 @@ TEST_CONFIG_NN = {
     "hidden_layers": [TEST_HIDDEN_LAYER],
 }
 TEST_CONFIG_PIPE = {
-    "start_spawnrate": 80.9,
-    "min_spawnrate": 35,
-    "acc_spawnrate": 0.1,
-    "start_speed": 3.5,
-    "max_speed": 11,
-    "acc_speed": 0.03,
     "width": 50,
-    "spacing": 220,
+    "spacing": 200,
 }
+
+TEST_PIPE_SPEED = 3.5
 
 
 @pytest.fixture
@@ -37,4 +33,4 @@ def test_bird():
 @pytest.fixture
 def test_pipe():
     with patch("pygame.display.get_surface", return_value=TEST_SCREEN):
-        yield Pipe.create(TEST_CONFIG_PIPE, TEST_CONFIG_PIPE["start_speed"])
+        yield Pipe.create(TEST_CONFIG_PIPE, TEST_PIPE_SPEED)
