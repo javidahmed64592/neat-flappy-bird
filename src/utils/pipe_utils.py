@@ -3,7 +3,7 @@ from typing import List, Optional
 from src.objects.pipe import Pipe
 
 
-def get_closest_pipe(pipes: List["Pipe"], bird_pos_x: float) -> Optional["Pipe"]:
+def get_closest_pipe(pipes: List[Pipe], bird_pos_x: float) -> Optional[Pipe]:
     """
     Determine which pipe pair is closest to and in front of the birds.
 
