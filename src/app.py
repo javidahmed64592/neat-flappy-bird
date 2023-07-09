@@ -1,15 +1,18 @@
 import sys
 
 import pygame
+from dotenv import load_dotenv
 from pygame.locals import QUIT
 
 from src.models.ga import Population
 from src.objects.bird import Bird
 from src.objects.pipe import Pipe
-from src.utils.config_utils import load_configs
+from src.utils.config_utils import get_config
 
-config_names = ["game", "ga", "nn", "bird", "pipe"]
-config = load_configs(config_names)
+load_dotenv()
+
+
+config = get_config()
 
 
 class App:
@@ -21,8 +24,8 @@ class App:
     """
 
     pygame.init()
-    FONT = pygame.font.SysFont(config["game"]["font"]["font"], config["game"]["font"]["size"])
-    FPS = config["game"]["fps"]
+    FONT = pygame.font.SysFont(config.GAME["font"]["font"], config.GAME["font"]["size"])
+    FPS = config.GAME["fps"]
     FramePerSec = pygame.time.Clock()
 
     def __init__(self, width: int, height: int, name: str):
@@ -56,8 +59,8 @@ class App:
         """
         app = cls(width, height, name)
         app.create_population(
-            population_size=config["ga"]["population_size"],
-            mutation_rate=config["ga"]["mutation_rate"],
+            population_size=config.GA["population_size"],
+            mutation_rate=config.GA["mutation_rate"],
         )
         app.create_pipes()
         return app
@@ -81,7 +84,7 @@ class App:
         """
         self.birds = []
         for _ in range(population_size):
-            self.birds.append(Bird.create(config["bird"], config["nn"]))
+            self.birds.append(Bird.create(config.BIRD, config.NN))
 
         self.population = Population(self.birds, mutation_rate)
 
@@ -90,8 +93,8 @@ class App:
         Create list for pipes and set spawnrate and speed.
         """
         self.pipes = []
-        self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
-        self.pipe_current_speed = config["pipe"]["start_speed"]
+        self.pipe_current_spawnrate = config.PIPE["start_spawnrate"]
+        self.pipe_current_speed = config.PIPE["start_speed"]
 
     def write_text(self, text: str, x: float, y: float) -> None:
         """
@@ -116,31 +119,31 @@ class App:
         self.write_text(
             f"Birds alive: {self.population.num_alive}",
             0,
-            config["game"]["font"]["size"],
+            config.GAME["font"]["size"],
         )
         self.write_text(
             f"Score: {self.population.best_member.score}",
             0,
-            config["game"]["font"]["size"] * 2,
+            config.GAME["font"]["size"] * 2,
         )
 
     def update(self) -> None:
         """ """
-        if self.population.num_alive == 0 or self.population.best_member.score == config["ga"]["max_score"]:
+        if self.population.num_alive == 0 or self.population.best_member.score == config.GA["max_score"]:
             self.population.evaluate()
             self.pipes = []
-            self.pipe_current_speed = config["pipe"]["start_speed"]
-            self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
+            self.pipe_current_speed = config.PIPE["start_speed"]
+            self.pipe_current_spawnrate = config.PIPE["start_spawnrate"]
 
         if self.count % int(self.pipe_current_spawnrate) == 0:
-            self.pipes.append(Pipe.create(config_pipe=config["pipe"], speed=self.pipe_current_speed))
+            self.pipes.append(Pipe.create(config_pipe=config.PIPE, speed=self.pipe_current_speed))
             self.pipe_current_speed = min(
-                self.pipe_current_speed + config["pipe"]["acc_speed"],
-                config["pipe"]["max_speed"],
+                self.pipe_current_speed + config.PIPE["acc_speed"],
+                config.PIPE["max_speed"],
             )
             self.pipe_current_spawnrate = max(
-                self.pipe_current_spawnrate - config["pipe"]["acc_spawnrate"],
-                config["pipe"]["min_spawnrate"],
+                self.pipe_current_spawnrate - config.PIPE["acc_spawnrate"],
+                config.PIPE["min_spawnrate"],
             )
             self.count = 1
 
@@ -184,9 +187,9 @@ def run_app():
     Run application.
     """
     app = App.create_app(
-        width=config["game"]["screen"]["width"],
-        height=config["game"]["screen"]["height"],
-        name=config["game"]["name"],
+        width=config.GAME["screen"]["width"],
+        height=config.GAME["screen"]["height"],
+        name=config.GAME["name"],
     )
 
     app.run()
