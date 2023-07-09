@@ -30,6 +30,14 @@ class Pipe:
         self.width = width
         self.spacing = spacing
         self.speed = speed
+        self.screen = pygame.display.get_surface()
+        self.color = (0, 255, 0)
+        self.x = float(self.screen.get_size()[0])
+        self.top = np.random.uniform(
+            (1 / 5) * (self.screen.get_size()[1] - spacing),
+            (4 / 5) * (self.screen.get_size()[1] - spacing),
+        )
+        self.bottom = self.screen.get_size()[1] - (self.top + spacing)
 
     @classmethod
     def create(cls, config_pipe: Dict[str, Any], speed: float) -> "Pipe":
@@ -44,16 +52,8 @@ class Pipe:
             (Pipe): Configured pipe
         """
         pipe = cls(config_pipe["width"], config_pipe["spacing"], speed)
-        pipe.screen = pygame.display.get_surface()
-        pipe.top = np.random.uniform(
-            (1 / 5) * (pipe.screen.get_size()[1] - config_pipe["spacing"]),
-            (4 / 5) * (pipe.screen.get_size()[1] - config_pipe["spacing"]),
-        )
-        pipe.bottom = pipe.screen.get_size()[1] - (pipe.top + config_pipe["spacing"])
-        pipe.x = float(pipe.screen.get_size()[0])
         pipe.rect_top = pygame.Rect(pipe.x, 0, config_pipe["width"], pipe.top)
         pipe.rect_bot = pygame.Rect(pipe.x, pipe.top + config_pipe["spacing"], config_pipe["width"], pipe.bottom)
-        pipe.color = (0, 255, 0)
         return pipe
 
     def draw(self) -> None:

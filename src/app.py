@@ -1,5 +1,4 @@
 import sys
-from typing import List
 
 import pygame
 from pygame.locals import QUIT
@@ -90,7 +89,7 @@ class App:
         """
         Create list for pipes and set spawnrate and speed.
         """
-        self.pipes: List[Pipe] = []
+        self.pipes = []
         self.pipe_current_spawnrate = config["pipe"]["start_spawnrate"]
         self.pipe_current_speed = config["pipe"]["start_speed"]
 
