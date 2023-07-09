@@ -32,7 +32,7 @@ class Matrix:
                 self.matrix = np.matrix.reshape(elements_to_reshape, (rows, cols))  # type: ignore
                 if self.matrix.dtype in ["float64", "int32"]:
                     # print(f"MATRIX DTYPE: {self.matrix.dtype}")
-                    raise TypeError(f"MATRIX DTYPE: {self.matrix.dtype}")
+                    raise TypeError(str(self.matrix.dtype))
             except ValueError:
                 raise ValueError(
                     f"Number of elements must be compatible with provided shape.\n{rows} rows, {cols} columns, \
