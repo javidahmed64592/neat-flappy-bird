@@ -128,7 +128,9 @@ class App:
         )
 
     def update(self) -> None:
-        """ """
+        """
+        Perform physics calculations and draw elements to screen.
+        """
         if self.population.num_alive == 0 or self.population.best_member.score == config.GA["max_score"]:
             self.population.evaluate()
             self.pipes = []
