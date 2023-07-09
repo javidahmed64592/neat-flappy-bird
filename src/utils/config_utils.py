@@ -1,7 +1,7 @@
+import json
 import os
 from pathlib import Path
-import json
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 def get_wd() -> Path:

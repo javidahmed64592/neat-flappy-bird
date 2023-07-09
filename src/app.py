@@ -1,7 +1,9 @@
 import sys
 from typing import List
+
 import pygame
 from pygame.locals import QUIT
+
 from src.models.ga import Population
 from src.objects.bird import Bird
 from src.objects.pipe import Pipe

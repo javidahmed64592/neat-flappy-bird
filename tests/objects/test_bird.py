@@ -1,7 +1,9 @@
-from unittest.mock import patch, call
+from unittest.mock import call, patch
+
 import numpy as np
-from src.objects.bird import Bird
+
 from src.models.nn import NeuralNetwork
+from src.objects.bird import Bird
 
 
 class TestBird:

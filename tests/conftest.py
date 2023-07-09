@@ -1,6 +1,8 @@
-import pytest
 from unittest.mock import patch
+
 import pygame
+import pytest
+
 from src.objects.bird import Bird
 from src.objects.pipe import Pipe
 

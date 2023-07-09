@@ -1,5 +1,6 @@
+from typing import Any, List, Union
+
 import numpy as np
-from typing import Union, List, Any
 
 
 class Matrix:

@@ -1,5 +1,7 @@
-import numpy as np
 from typing import List, Optional
+
+import numpy as np
+
 from src.objects.pipe import Pipe
 
 

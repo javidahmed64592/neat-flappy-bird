@@ -1,8 +1,10 @@
+from typing import Any, Dict, List
+
 import numpy as np
-from typing import List, Dict, Any
 import pygame
-from src.objects.pipe import Pipe
+
 from src.models.nn import NeuralNetwork
+from src.objects.pipe import Pipe
 from src.utils.pipe_utils import get_closest_pipe
 
 
