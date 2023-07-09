@@ -8,37 +8,29 @@ from src.objects.bird import Bird
 
 
 class TestBird:
-    MOCK_SCREEN_SIZE = [700, 700]
-    MOCK_COLOR = np.array([255, 0, 0])
-    MOCK_CONFIG_BIRD = {"x": 30, "y": 400, "width": 40, "height": 40, "grav": 1, "lift": -20, "min_velocity": -10}
-    MOCK_CONFIG_NN: Dict[str, Any] = {}
     MOCK_START_VEL = 0
     MOCK_START_ALIVE = True
     MOCK_START_COUNT = 0
 
-    @patch("src.objects.bird.np.random.randint")
-    def test_create_bird(self, mock_rand_int, test_bird):
-        mock_rand_int.return_value = self.MOCK_COLOR
-
+    def test_create_bird(self, test_bird, test_config_bird, test_screen_size):
         assert isinstance(test_bird, Bird)
-        assert test_bird.GRAV == self.MOCK_CONFIG_BIRD["grav"]
-        assert test_bird.LIFT == self.MOCK_CONFIG_BIRD["lift"]
-        assert test_bird.MIN_VELOCITY == self.MOCK_CONFIG_BIRD["min_velocity"]
-        assert test_bird.start_y == self.MOCK_CONFIG_BIRD["y"]
+        assert test_bird.GRAV == test_config_bird["grav"]
+        assert test_bird.LIFT == test_config_bird["lift"]
+        assert test_bird.MIN_VELOCITY == test_config_bird["min_velocity"]
+        assert test_bird.start_y == test_config_bird["y"]
         assert test_bird.velocity == self.MOCK_START_VEL
         assert test_bird.alive == self.MOCK_START_ALIVE
         assert test_bird.count == self.MOCK_START_COUNT
-        assert (test_bird.color - self.MOCK_COLOR).all()
-        assert test_bird.screen_width == self.MOCK_SCREEN_SIZE[0]
-        assert test_bird.screen_height == self.MOCK_SCREEN_SIZE[1]
+        assert test_bird.screen_width == test_screen_size[0]
+        assert test_bird.screen_height == test_screen_size[1]
         assert isinstance(test_bird.nn, NeuralNetwork)
 
-    def test_reset_bird(self, test_bird):
+    def test_reset_bird(self, test_bird, test_config_bird):
         test_bird.update([])
         test_bird.kill()
         test_bird.reset()
 
-        assert test_bird.y == self.MOCK_CONFIG_BIRD["y"]
+        assert test_bird.y == test_config_bird["y"]
         assert test_bird.velocity == 0
         assert test_bird.count == 0
         assert test_bird.alive
@@ -57,10 +49,10 @@ class TestBird:
             call(test_bird.screen, test_bird.color, test_bird),
         )
 
-    def test_jump_bird(self, test_bird):
+    def test_jump_bird(self, test_bird, test_config_bird):
         test_bird.jump()
 
-        assert test_bird.velocity == self.MOCK_CONFIG_BIRD["lift"]
+        assert test_bird.velocity == test_config_bird["lift"]
 
     @patch("src.objects.bird.pygame.draw.rect")
     def test_update_bird_draw(self, mock_draw_rect, test_bird):
@@ -75,24 +67,24 @@ class TestBird:
         )
 
     @patch("src.objects.bird.NeuralNetwork.feedforward")
-    def test_update_bird_velocity_no_jump(self, mock_feedforward, test_bird):
+    def test_update_bird_velocity_no_jump(self, mock_feedforward, test_bird, test_config_bird):
         mock_feedforward.return_value = [0, 1]
 
         test_bird.update([])
 
-        assert test_bird.velocity == self.MOCK_CONFIG_BIRD["grav"]
-        assert test_bird.y == self.MOCK_CONFIG_BIRD["y"] + test_bird.velocity
+        assert test_bird.velocity == test_config_bird["grav"]
+        assert test_bird.y == test_config_bird["y"] + test_bird.velocity
 
     @patch("src.objects.bird.NeuralNetwork.feedforward")
-    def test_update_bird_velocity_jump(self, mock_feedforward, test_bird):
+    def test_update_bird_velocity_jump(self, mock_feedforward, test_bird, test_config_bird):
         mock_feedforward.return_value = [1, 0]
 
         test_bird.update([])
 
         assert test_bird.velocity == max(
-            self.MOCK_CONFIG_BIRD["min_velocity"], self.MOCK_CONFIG_BIRD["grav"] + self.MOCK_CONFIG_BIRD["lift"]
+            test_config_bird["min_velocity"], test_config_bird["grav"] + test_config_bird["lift"]
         )
-        assert test_bird.y == self.MOCK_CONFIG_BIRD["y"] + test_bird.velocity
+        assert test_bird.y == test_config_bird["y"] + test_bird.velocity
 
     @patch("src.objects.bird.Bird.jump")
     @patch("src.objects.bird.NeuralNetwork.feedforward")
