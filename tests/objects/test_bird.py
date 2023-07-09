@@ -1,7 +1,4 @@
-from typing import Any, Dict
 from unittest.mock import call, patch
-
-import numpy as np
 
 from src.models.nn import NeuralNetwork
 from src.objects.bird import Bird
