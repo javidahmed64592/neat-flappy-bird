@@ -30,8 +30,9 @@ class Matrix:
             elements_to_reshape = elements.matrix if isinstance(elements, (Matrix)) else np.array(elements)
             try:
                 self.matrix = np.matrix.reshape(elements_to_reshape, (rows, cols))  # type: ignore
-                if self.matrix.dtype not in ["float64", "int32"]:
-                    raise TypeError("All provided elements in array must be of type int or float.")
+                if self.matrix.dtype in ["float64", "int32"]:
+                    # print(f"MATRIX DTYPE: {self.matrix.dtype}")
+                    raise TypeError("MATRIX DTYPE: {self.matrix.dtype}")
             except ValueError:
                 raise ValueError(
                     f"Number of elements must be compatible with provided shape.\n{rows} rows, {cols} columns, \
