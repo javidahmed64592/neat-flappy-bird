@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pygame = "~=2.5"
 numpy = "~=1.25"
+python-dotenv = "~=1.0"
 
 [dev-packages]
 black = "~=23.3"
