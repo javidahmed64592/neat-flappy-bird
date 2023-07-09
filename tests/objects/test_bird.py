@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from unittest.mock import call, patch
 
 import numpy as np
@@ -10,7 +11,7 @@ class TestBird:
     MOCK_SCREEN_SIZE = [700, 700]
     MOCK_COLOR = np.array([255, 0, 0])
     MOCK_CONFIG_BIRD = {"x": 30, "y": 400, "width": 40, "height": 40, "grav": 1, "lift": -20, "min_velocity": -10}
-    MOCK_CONFIG_NN = {}
+    MOCK_CONFIG_NN: Dict[str, Any] = {}
     MOCK_START_VEL = 0
     MOCK_START_ALIVE = True
     MOCK_START_COUNT = 0
