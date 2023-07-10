@@ -20,3 +20,6 @@ coverage.xml
 
 # mypy
 .mypy_cache/
+
+# env
+.env
