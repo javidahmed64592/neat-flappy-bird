@@ -17,7 +17,7 @@ def get_config_module(settings_module: str = "") -> ModuleType:
         [ModuleType]: config module, available to use via `config.<param>`
     """
     if not settings_module:
-        settings_module = os.environ["SETTINGS_MODULE"]
+        settings_module = os.environ.get("SETTINGS_MODULE", "src.config.defaults")
 
     config = import_module(settings_module)
     return config
