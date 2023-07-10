@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 
 from src.models.activation_functions import ActivationFunctions
-from src.models.matrix import Matrix
+from src.utils.matrix_utils import matrix_crossover
 
 
 class Layer:
@@ -66,8 +66,8 @@ class Layer:
         Parameters:
             cols (int): Number of columns for weights matrix
         """
-        self.weights = Matrix.random_matrix(self.num_nodes, cols, self.weights_range[0], self.weights_range[1])
-        self.bias = Matrix.random_matrix(self.num_nodes, 1, self.bias_range[0], self.bias_range[1])
+        self.weights = np.random.uniform(self.weights_range[0], self.weights_range[1], size=(self.num_nodes, cols))
+        self.bias = np.random.uniform(self.bias_range[0], self.bias_range[1], size=(self.num_nodes, 1))
 
     def set_values(self, values: np.ndarray) -> None:
         """
@@ -76,8 +76,7 @@ class Layer:
         Parameters:
             values (List[float]): Values to assign to nodes
         """
-        self.values = Matrix.column_matrix(values)
-        self.values = Matrix.map(self.values, self.activation)
+        self.values = np.matrix([[self.activation(v)] for v in values])
 
     def feedforward(self, values: np.ndarray) -> None:
         """
@@ -94,8 +93,8 @@ class Layer:
         Parameters:
             values (np.ndarray): Node values from previous layer
         """
-        self.values = self.weights * Matrix.column_matrix(values) + self.bias
-        self.values = Matrix.map(self.values, self.activation)
+        self.values = self.weights.dot(values) + self.bias
+        self.values = np.vectorize(self.activation)(self.values)
 
     def crossover(self, layer: "Layer", other_layer: "Layer", mutation_rate: float) -> None:
         """
@@ -106,7 +105,7 @@ class Layer:
             other_layer (Layer): Other layer to use
             mutation_rate (float): Probability for random mutation, range [0, 1]
         """
-        self.new_weights = Matrix.crossover(
+        self.new_weights = matrix_crossover(
             layer.weights,
             other_layer.weights,
             mutation_rate,
@@ -114,7 +113,7 @@ class Layer:
             self.weights_range[1],
         )
 
-        self.new_bias = Matrix.crossover(
+        self.new_bias = matrix_crossover(
             layer.bias,
             other_layer.bias,
             mutation_rate,
