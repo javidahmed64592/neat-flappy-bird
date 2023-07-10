@@ -7,12 +7,12 @@ from pygame.locals import QUIT
 from src.models.ga import Population
 from src.objects.bird import Bird
 from src.objects.pipe import Pipe
-from src.utils.config_utils import get_config
+from src.utils.config_utils import get_config_module
 
 load_dotenv()
 
 
-config = get_config()
+config = get_config_module()
 
 
 class App:

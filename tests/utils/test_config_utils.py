@@ -1,28 +1,17 @@
-from unittest.mock import patch
-from pathlib import Path
-from src.utils.config_utils import get_wd, get_config_folder, parse_configs, load_json, load_configs  # type: ignore
+from unittest.mock import call, patch
+
+from src.utils.config_utils import get_config_module, load_configs, load_json, parse_configs
 
 
-class TestActivationFunctions:
-    TEST_WD = Path("/path/to/wd")
+class TestConfigUtils:
     TEST_JSON_FILE = "test_config.json"
     TEST_JSON_DATA = {"test": "data"}
 
-    @patch("src.utils.config_utils.os.path.realpath")
-    def test_get_wd(self, mock_realpath):
-        mock_realpath.return_value = self.TEST_WD / "utils"
-        path_expected = Path(self.TEST_WD)
-        path_actual = get_wd()
-
-        assert path_actual == path_expected
-
-    @patch("src.utils.config_utils.get_wd")
-    def test_get_config_folder(self, mock_get_wd):
-        mock_get_wd.return_value = self.TEST_WD
-        path_expected = Path.joinpath(self.TEST_WD, "config")
-        path_actual = get_config_folder()
-
-        assert path_actual == path_expected
+    @patch("src.utils.config_utils.import_module")
+    def test_given_settings_module_when_getting_config_module_then_check_config_gets_returned(self, mock_import_module):
+        mock_settings_module = "src.config.test"
+        get_config_module(mock_settings_module)
+        assert mock_import_module.has_calls(call(mock_settings_module))
 
     def test_parse_configs(self):
         test_names = ["name1", "name2", "name3"]
