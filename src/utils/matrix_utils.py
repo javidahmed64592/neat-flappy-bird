@@ -22,22 +22,7 @@ def matrix_crossover(
     Returns:
         (ndarray): Mixed matrix from provided matrices
     """
-    matrix_elements = matrix.tolist()
-    other_matrix_elements = other_matrix.tolist()
-
-    elements = []
-
     return np.vectorize(select_gene)(mutation_rate, low, high, matrix, other_matrix)
-
-    # for i in range(len(matrix)):
-    #     for j in range(len(matrix[i])):
-    #         rng = np.random.uniform(0, 1)
-    #         self.values = np.vectorize(self.activation)(self.values)
-    #         elements.append(
-    #             select_gene(rng, mutation_rate, low, high, matrix_elements[i][j], other_matrix_elements[i][j])
-    #         )
-
-    # return np.matrix(elements)
 
 
 def select_gene(mutation_rate, low, high, element, other_element):
