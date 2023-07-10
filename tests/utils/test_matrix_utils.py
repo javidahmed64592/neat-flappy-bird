@@ -1,4 +1,4 @@
-from unittest.mock import call, patch
+from unittest.mock import patch
 
 from src.utils.matrix_utils import generate_number, select_gene
 
@@ -24,7 +24,7 @@ class TestMatrixUtils:
         assert self.MOCK_LOW <= actual_value <= self.MOCK_HIGH
 
     @patch("src.utils.matrix_utils.generate_number")
-    def test_given_rng_greater_than_mutation_less_than_other_element_rng_when_getting_element_then_check_random_element_returned(
+    def test_given_rng_greater_than_mutation_less_than_other_element_rng_when_getting_element_then_check_random_element_returned(  # noqa: E501
         self, mock_rng
     ):
         mock_rng.return_value = self.MOCK_MUTATION_RATE + 0.1
@@ -36,7 +36,7 @@ class TestMatrixUtils:
         assert actual_value == self.MOCK_ELEMENT
 
     @patch("src.utils.matrix_utils.generate_number")
-    def test_given_rng_greater_than_mutation_greater_than_other_element_rng_when_getting_element_then_check_random_element_returned(
+    def test_given_rng_greater_than_mutation_greater_than_other_element_rng_when_getting_element_then_check_random_element_returned(  # noqa: E501
         self, mock_rng
     ):
         mock_rng.return_value = self.MOCK_MUTATION_RATE + 0.4
