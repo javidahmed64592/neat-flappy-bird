@@ -2,6 +2,9 @@ import numpy as np
 
 
 def generate_number():
+    """
+    Generate a random number between 0 and 1.
+    """
     return np.random.uniform(0, 1)
 
 
