@@ -3,7 +3,6 @@ from typing import Any, Dict, List
 import numpy as np
 
 from src.models.layer import Layer
-from src.models.matrix import Matrix
 
 
 class NeuralNetwork:
@@ -84,9 +83,9 @@ class NeuralNetwork:
         """
         self.layers[0].set_values(input_array)
         for layer_index in range(1, len(self.layers)):
-            self.layers[layer_index].feedforward(Matrix.to_array(self.layers[layer_index - 1].values))
+            self.layers[layer_index].feedforward((self.layers[layer_index - 1].values))
 
-        return Matrix.to_array(self.layers[-1].values)
+        return self.layers[-1].values
 
     def crossover(self, nn: "NeuralNetwork", other_nn: "NeuralNetwork", mutation_rate: float) -> None:
         """

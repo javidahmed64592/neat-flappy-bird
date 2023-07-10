@@ -53,7 +53,7 @@ class Bird:
         self.LIFT = lift
         self.MIN_VELOCITY = min_velocity
         self.screen = pygame.display.get_surface()
-        self.color = tuple(np.random.randint(low=0, high=256, size=(1, 3)))
+        self.color = self.random_color()
         self.screen_width = self.screen.get_size()[0]
         self.screen_height = self.screen.get_size()[1]
 
@@ -89,6 +89,14 @@ class Bird:
         bird.rect = pygame.Rect(config_bird["x"], config_bird["y"], config_bird["width"], config_bird["height"])
 
         return bird
+
+    @staticmethod
+    def random_color() -> tuple:
+        return (
+            np.random.randint(low=0, high=256),
+            np.random.randint(low=0, high=256),
+            np.random.randint(low=0, high=256),
+        )
 
     def reset(self) -> None:
         """
