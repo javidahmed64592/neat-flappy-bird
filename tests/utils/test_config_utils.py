@@ -13,6 +13,16 @@ class TestConfigUtils:
         get_config_module(mock_settings_module)
         assert mock_import_module.has_calls(call(mock_settings_module))
 
+    @patch("src.utils.config_utils.import_module")
+    @patch("src.utils.config_utils.os")
+    def test_given_no_settings_module_when_getting_config_module_then_check_config_gets_returned(
+        self, mock_os, mock_import_module
+    ):
+        mock_settings_module = "src.config.test"
+        mock_os.return_value.environ.return_value = {"SETTINGS_MODULE": mock_settings_module}
+        get_config_module()
+        assert mock_import_module.has_calls(call(mock_settings_module))
+
     def test_parse_configs(self):
         test_names = ["name1", "name2", "name3"]
         test_vals = ["val1", "val2", "val3"]
