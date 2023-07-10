@@ -19,7 +19,7 @@ class TestConfigUtils:
         self, mock_os, mock_import_module
     ):
         mock_settings_module = "src.config.test"
-        mock_os.return_value.environ.return_value = {"SETTINGS_MODULE": mock_settings_module}
+        mock_os.return_value.environ.return_value.get.return_value = mock_settings_module
         get_config_module()
         assert mock_import_module.has_calls(call(mock_settings_module))
 
