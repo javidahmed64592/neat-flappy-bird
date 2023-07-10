@@ -51,6 +51,10 @@ class TestBird:
 
         assert test_bird.velocity == test_config_bird["lift"]
 
+    def test_dead_bird(self, test_bird):
+        test_bird.kill()
+        assert test_bird.update([]) is None
+
     @patch("src.objects.bird.pygame.draw.rect")
     def test_update_bird_draw(self, mock_draw_rect, test_bird):
         mock_draw_rect.return_value = None
