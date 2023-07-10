@@ -6,8 +6,8 @@ def select_gene(element: float, other_element: float, mutation_rate: float, low:
     Select a gene between two matrices or a random gene.
 
     Parameters:
-        element (ndarray): Matrix to use to generate new matrix
-        other_element (ndarray): Matrix to use to generate new matrix
+        element (float): Element to use for selection
+        other_element (float): Other element to use for selection
         mutation_rate (float): Probability for element to be random, range [0, 1]
         low (float): Lower limit for random element
         high (float): Upper limit for random element
