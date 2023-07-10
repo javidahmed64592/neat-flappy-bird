@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 
 from src.models.activation_functions import ActivationFunctions
-from src.utils.matrix_utils import matrix_crossover
+from src.utils.matrix_utils import select_gene
 
 
 class Layer:
@@ -105,7 +105,7 @@ class Layer:
             other_layer (Layer): Other layer to use
             mutation_rate (float): Probability for random mutation, range [0, 1]
         """
-        self.new_weights = matrix_crossover(
+        self.new_weights = np.vectorize(select_gene)(
             layer.weights,
             other_layer.weights,
             mutation_rate,
@@ -113,7 +113,7 @@ class Layer:
             self.weights_range[1],
         )
 
-        self.new_bias = matrix_crossover(
+        self.new_bias = np.vectorize(select_gene)(
             layer.bias,
             other_layer.bias,
             mutation_rate,
