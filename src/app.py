@@ -48,7 +48,7 @@ class App:
         self.count = 0
 
     @classmethod
-    def create_app(cls, width: int, height: int, name: str):
+    def create_app(cls, width: int, height: int, name: str) -> "App":
         """
         Create application and configure population and pipes.
 
