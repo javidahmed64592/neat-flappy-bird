@@ -1,10 +1,11 @@
+from pathlib import Path
 from unittest.mock import call, patch
 
 from src.utils.config_utils import get_config_module, load_configs, load_json, parse_configs
 
 
 class TestConfigUtils:
-    TEST_JSON_FILE = "test_config.json"
+    TEST_JSON_FILE = Path("test_config.json")
     TEST_JSON_DATA = {"test": "data"}
 
     @patch("src.utils.config_utils.import_module")
@@ -25,7 +26,7 @@ class TestConfigUtils:
 
     def test_parse_configs(self):
         test_names = ["name1", "name2", "name3"]
-        test_vals = ["val1", "val2", "val3"]
+        test_vals = [{"val1": 1, "val2": 1}, {"val1": 2, "val2": 2}, {"val1": 3, "val2": 3}]
 
         parsed_configs_expected = {"name1": "val1", "name2": "val2", "name3": "val3"}
         parsed_configs_actual = parse_configs(test_names, test_vals)
