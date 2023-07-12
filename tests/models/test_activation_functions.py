@@ -1,4 +1,4 @@
-from src.models.activation_functions import ActivationFunctions  # type: ignore
+from src.models.activation_functions import ActivationFunctions
 
 
 class TestActivationFunctions:
