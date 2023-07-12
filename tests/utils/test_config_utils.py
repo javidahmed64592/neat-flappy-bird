@@ -28,7 +28,11 @@ class TestConfigUtils:
         test_names = ["name1", "name2", "name3"]
         test_vals = [{"val1": 1, "val2": 1}, {"val1": 2, "val2": 2}, {"val1": 3, "val2": 3}]
 
-        parsed_configs_expected = {"name1": "val1", "name2": "val2", "name3": "val3"}
+        parsed_configs_expected = {
+            "name1": {"val1": 1, "val2": 1},
+            "name2": {"val1": 2, "val2": 2},
+            "name3": {"val1": 3, "val2": 3},
+        }
         parsed_configs_actual = parse_configs(test_names, test_vals)
 
         assert parsed_configs_actual == parsed_configs_expected
