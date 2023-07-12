@@ -3,7 +3,7 @@ import os
 from importlib import import_module
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Dict, List
+from typing import Any, Dict, List, cast
 
 
 def get_config_module(settings_module: str = "") -> ModuleType:
@@ -46,7 +46,7 @@ def load_json(filepath: Path) -> Dict[str, Any]:
         (Dict(str, Any)): json values
     """
     with open(filepath, "r") as file:
-        return json.load(file)
+        return cast(Dict[str, Any], json.load(file))
 
 
 def load_configs(config_names: List[str]) -> Dict[str, Any]:
