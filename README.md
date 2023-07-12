@@ -1,4 +1,4 @@
-[![python](https://img.shields.io/badge/Python-3.10-3776AB.svg?style=flat&logo=python&logoColor=ffd343)](https://docs.python.org/3.10/)
+[![python](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=ffd343)](https://docs.python.org/3.11/)
 [![codecov](https://codecov.io/gh/javidahmed64592/neuroevolution-flappy-bird/branch/main/graph/badge.svg?token=YGPGWHFMMG)](https://codecov.io/gh/javidahmed64592/neuroevolution-flappy-bird)
 <!-- omit from toc -->
 # Neuroevolution: Flappy Bird
