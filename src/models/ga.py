@@ -73,18 +73,8 @@ class Population:
         self.max_fitness = self.best_member.fitness
 
         for member in self.population:
-            parentA = None
-            parentB = None
-
-            while parentA is None:
-                potential_parent = self.population[np.random.randint(len(self.population))]
-                if potential_parent != member:
-                    parentA = self.select_parent(potential_parent)
-
-            while parentB is None:
-                potential_parent = self.population[np.random.randint(len(self.population))]
-                if potential_parent != parentA and potential_parent != member:
-                    parentB = self.select_parent(potential_parent)
+            parentA = self.select_parent(member)
+            parentB = self.select_parent(member, parentA)
 
             member.crossover(parentA, parentB, self.mutation_rate)
 
@@ -94,16 +84,21 @@ class Population:
 
         self.generation += 1
 
-    def select_parent(self, parent: Any) -> Optional[Any]:
+    def select_parent(self, member: Any, other_parent: Optional[Any] = None) -> Any:
         """
         Use Rejection Sampling to select a parent.
 
         Parameters:
-            parent (Any): Member of population, potential parent for child
+            member (Any): Member of population to select parents for
+            other_parent (Optional(Any)): Other parent if selected
 
         Returns:
             parent(Optional(Any)): Member of population if passed Rejection Sampling
         """
-        if np.random.uniform(0, 1) < parent.fitness / self.max_fitness:
-            return parent
-        return None
+        parent = None
+        while parent is None:
+            potential_parent = self.population[np.random.randint(len(self.population))]
+            if potential_parent != member and potential_parent != other_parent:
+                if np.random.uniform(0, 1) < potential_parent.fitness / self.max_fitness:
+                    parent = potential_parent
+                    return parent
