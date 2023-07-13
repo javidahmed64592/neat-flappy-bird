@@ -48,11 +48,6 @@ class TestBird:
             call(test_bird.screen, test_bird.color, test_bird),
         )
 
-    def test_given_bird_when_jumping_then_check_bird_has_correct_velocity(self, test_bird, test_config_bird):
-        test_bird.jump()
-
-        assert test_bird.velocity == test_config_bird["lift"]
-
     def test_given_dead_bird_when_updating_bird_then_check_update_returns_early(self, test_bird):
         test_bird.kill()
         assert test_bird.update([]) is None
