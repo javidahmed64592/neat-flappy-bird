@@ -2,13 +2,13 @@ from src.models.activation_functions import ActivationFunctions
 
 
 class TestActivationFunctions:
-    def test_linear(self):
+    def test_given_linear_activation_when_calculating_output_then_check_output_is_correct(self):
         x = 5
         y_expected = 5
         y_actual = ActivationFunctions.linear(x)
         assert y_actual == y_expected
 
-    def test_relu(self):
+    def test_given_relu_activation_when_calculating_output_then_check_output_is_correct(self):
         x1 = 5
         y1_expected = 5
         y1_actual = ActivationFunctions.relu(x1)
@@ -19,13 +19,13 @@ class TestActivationFunctions:
         y2_actual = ActivationFunctions.relu(x2)
         assert y2_actual == y2_expected
 
-    def test_sigmoid(self):
+    def test_given_sigmoid_activation_when_calculating_output_then_check_output_is_correct(self):
         x = 0
         y_expected = 0.5
         y_actual = ActivationFunctions.sigmoid(x)
         assert y_actual == y_expected
 
-    def test_get_linear_activation_function(self):
+    def test_given_linear_activation_when_getting_activation_function_then_check_output_is_correct(self):
         func_name = "linear"
         func = ActivationFunctions.get_activation(func_name)
         x = 1
@@ -33,7 +33,7 @@ class TestActivationFunctions:
         y_actual = func(x)
         assert y_actual == y_expected
 
-    def test_get_relu_activation_function(self):
+    def test_given_relu_activation_when_getting_activation_function_then_check_output_is_correct(self):
         func_name = "relu"
         func = ActivationFunctions.get_activation(func_name)
 
@@ -47,7 +47,7 @@ class TestActivationFunctions:
         y2_actual = func(x2)
         assert y2_actual == y2_expected
 
-    def test_get_sigmoid_activation_function(self):
+    def test_given_sigmoid_activation_when_getting_activation_function_then_check_output_is_correct(self):
         func_name = "sigmoid"
         func = ActivationFunctions.get_activation(func_name)
         x = 0

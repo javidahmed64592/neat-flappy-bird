@@ -24,7 +24,7 @@ class TestConfigUtils:
         get_config_module()
         assert mock_import_module.has_calls(call(mock_settings_module))
 
-    def test_parse_configs(self):
+    def test_given_test_config_when_parsing_config_then_check_config_is_correct(self):
         test_names = ["name1", "name2", "name3"]
         test_vals = [{"val1": 1, "val2": 1}, {"val1": 2, "val2": 2}, {"val1": 3, "val2": 3}]
 
@@ -39,7 +39,7 @@ class TestConfigUtils:
 
     @patch("src.utils.config_utils.open")
     @patch("src.utils.config_utils.json.load")
-    def test_load_json(self, mock_json_load, mock_open):
+    def test_given_test_json_when_loading_json_then_check_json_gets_loaded(self, mock_json_load, mock_open):
         mock_json_load.return_value = self.TEST_JSON_DATA
 
         data_actual = load_json(self.TEST_JSON_FILE)
@@ -48,7 +48,7 @@ class TestConfigUtils:
         assert data_actual == self.TEST_JSON_DATA
 
     @patch("src.utils.config_utils.load_json")
-    def test_load_configs(self, mock_load_json):
+    def test_given_test_configs_when_loading_configs_then_check_configs_loaded_correctly(self, mock_load_json):
         mock_load_json.return_value = self.TEST_JSON_DATA
         test_config_names = ["config1", "config2", "config3"]
 

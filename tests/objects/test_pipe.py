@@ -8,7 +8,9 @@ class TestPipe:
     MOCK_CONFIG_PIPE = {"width": 50, "spacing": 200}
     MOCK_SPEED = 3.5
 
-    def test_create_pipe(self, test_pipe, test_config_pipe):
+    def test_given_pipe_config_when_creating_pipe_then_check_pipe_has_correct_properties(
+        self, test_pipe, test_config_pipe
+    ):
         assert isinstance(test_pipe, Pipe)
         assert test_pipe.width == test_config_pipe["width"]
         assert test_pipe.spacing == test_config_pipe["spacing"]
@@ -19,7 +21,9 @@ class TestPipe:
         assert test_pipe.color == test_config_pipe["color"]
 
     @patch("src.objects.pipe.pygame.draw.rect")
-    def test_draw_pipe(self, mock_draw_rect, test_pipe, test_config_pipe):
+    def test_given_pipe_when_drawing_pipe_then_check_both_pipes_drawn(
+        self, mock_draw_rect, test_pipe, test_config_pipe
+    ):
         mock_draw_rect.return_value = None
 
         test_pipe = Pipe.create(test_config_pipe, self.MOCK_SPEED)
@@ -32,7 +36,7 @@ class TestPipe:
         )
 
     @patch("src.objects.pipe.pygame.draw.rect")
-    def test_update_moving_pipe(self, mock_draw_rect, test_pipe):
+    def test_given_pipe_when_updating_pipe_then_check_pipe_has_correct_position(self, mock_draw_rect, test_pipe):
         mock_draw_rect.return_value = None
 
         test_pipe.update()
@@ -40,7 +44,9 @@ class TestPipe:
         assert test_pipe.x == self.MOCK_SCREEN_SIZE[0] - self.MOCK_SPEED
         assert mock_draw_rect.called
 
-    def test_pipe_offscreen(self, test_pipe, test_config_pipe):
+    def test_given_moving_pipe_when_moved_offscreen_then_check_offscreen_returns_true(
+        self, test_pipe, test_config_pipe
+    ):
         num_update = int((self.MOCK_SCREEN_SIZE[0] + test_config_pipe["width"]) / self.MOCK_SPEED)
 
         for _ in range(num_update + 1):
