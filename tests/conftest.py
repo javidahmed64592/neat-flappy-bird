@@ -3,6 +3,7 @@ from unittest.mock import patch
 import pygame
 import pytest
 
+from src.models.ga import Population
 from src.objects.bird import Bird
 from src.objects.pipe import Pipe
 
@@ -39,10 +40,39 @@ def test_screen(test_screen_size):
 @pytest.fixture
 def test_bird(test_config_bird, test_config_nn, test_screen):
     with patch("pygame.display.get_surface", return_value=test_screen):
-        yield Bird.create(test_config_bird, test_config_nn)
+        return Bird.create(test_config_bird, test_config_nn)
+
+
+@pytest.fixture
+def test_bird_low_score(test_config_bird, test_config_nn, test_screen):
+    with patch("pygame.display.get_surface", return_value=test_screen):
+        bird = Bird.create(test_config_bird, test_config_nn)
+        bird.count = 100
+        return bird
+
+
+@pytest.fixture
+def test_bird_mid_score(test_config_bird, test_config_nn, test_screen):
+    with patch("pygame.display.get_surface", return_value=test_screen):
+        bird = Bird.create(test_config_bird, test_config_nn)
+        bird.count = 400
+        return bird
+
+
+@pytest.fixture
+def test_bird_high_score(test_config_bird, test_config_nn, test_screen):
+    with patch("pygame.display.get_surface", return_value=test_screen):
+        bird = Bird.create(test_config_bird, test_config_nn)
+        bird.count = 900
+        return bird
 
 
 @pytest.fixture
 def test_pipe(test_config_pipe, test_screen):
     with patch("pygame.display.get_surface", return_value=test_screen):
         yield Pipe.create(test_config_pipe, 3.5)
+
+
+@pytest.fixture
+def test_population(test_bird_low_score, test_bird_mid_score, test_bird_high_score):
+    return Population([test_bird_low_score, test_bird_mid_score, test_bird_high_score])
