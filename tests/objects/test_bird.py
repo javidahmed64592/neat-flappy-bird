@@ -5,31 +5,27 @@ from src.objects.bird import Bird
 
 
 class TestBird:
-    MOCK_START_VEL = 0
-    MOCK_START_ALIVE = True
-    MOCK_START_COUNT = 0
-
     def test_given_bird_config_when_creating_bird_then_check_bird_has_correct_properties(
-        self, mock_bird, mock_config_bird, mock_screen_size
+        self, mock_bird, mock_config, mock_screen_size
     ):
         assert isinstance(mock_bird, Bird)
-        assert mock_bird.GRAV == mock_config_bird["grav"]
-        assert mock_bird.LIFT == mock_config_bird["lift"]
-        assert mock_bird.MIN_VELOCITY == mock_config_bird["min_velocity"]
-        assert mock_bird.start_y == mock_config_bird["y"]
-        assert mock_bird.velocity == self.MOCK_START_VEL
-        assert mock_bird.alive == self.MOCK_START_ALIVE
-        assert mock_bird.count == self.MOCK_START_COUNT
+        assert mock_bird.GRAV == mock_config.BIRD["grav"]
+        assert mock_bird.LIFT == mock_config.BIRD["lift"]
+        assert mock_bird.MIN_VELOCITY == mock_config.BIRD["min_velocity"]
+        assert mock_bird.start_y == mock_config.BIRD["y"]
+        assert mock_bird.velocity == 0
+        assert mock_bird.alive == True
+        assert mock_bird.count == 0
         assert mock_bird.screen_width == mock_screen_size[0]
         assert mock_bird.screen_height == mock_screen_size[1]
         assert isinstance(mock_bird.nn, NeuralNetwork)
 
-    def test_given_bird_when_resetting_then_check_bird_properties_reset_correctly(self, mock_bird, mock_config_bird):
+    def test_given_bird_when_resetting_then_check_bird_properties_reset_correctly(self, mock_bird, mock_config):
         mock_bird.update([])
         mock_bird.kill()
         mock_bird.reset()
 
-        assert mock_bird.y == mock_config_bird["y"]
+        assert mock_bird.y == mock_config.BIRD["y"]
         assert mock_bird.velocity == 0
         assert mock_bird.count == 0
         assert mock_bird.alive
@@ -54,27 +50,27 @@ class TestBird:
 
     @patch("src.objects.bird.NeuralNetwork.feedforward")
     def test_given_bird_when_not_jumping_then_check_bird_has_correct_velocity(
-        self, mock_feedforward, mock_bird, mock_config_bird
+        self, mock_feedforward, mock_bird, mock_config
     ):
         mock_feedforward.return_value = [0, 1]
 
         mock_bird.update([])
 
-        assert mock_bird.velocity == mock_config_bird["grav"]
-        assert mock_bird.y == mock_config_bird["y"] + mock_bird.velocity
+        assert mock_bird.velocity == mock_config.BIRD["grav"]
+        assert mock_bird.y == mock_config.BIRD["y"] + mock_bird.velocity
 
     @patch("src.objects.bird.NeuralNetwork.feedforward")
     def test_given_bird_when_jumping_then_check_bird_has_correct_velocity(
-        self, mock_feedforward, mock_bird, mock_config_bird
+        self, mock_feedforward, mock_bird, mock_config
     ):
         mock_feedforward.return_value = [1, 0]
 
         mock_bird.update([])
 
         assert mock_bird.velocity == max(
-            mock_config_bird["min_velocity"], mock_config_bird["grav"] + mock_config_bird["lift"]
+            mock_config.BIRD["min_velocity"], mock_config.BIRD["grav"] + mock_config.BIRD["lift"]
         )
-        assert mock_bird.y == mock_config_bird["y"] + mock_bird.velocity
+        assert mock_bird.y == mock_config.BIRD["y"] + mock_bird.velocity
 
     @patch("src.objects.bird.Bird.jump")
     @patch("src.objects.bird.NeuralNetwork.feedforward")
