@@ -14,7 +14,7 @@ class TestBird:
         assert mock_bird.MIN_VELOCITY == mock_config.BIRD["min_velocity"]
         assert mock_bird.start_y == mock_config.BIRD["y"]
         assert mock_bird.velocity == 0
-        assert mock_bird.alive == True
+        assert mock_bird.alive is True
         assert mock_bird.count == 0
         assert mock_bird.screen_width == mock_screen_size[0]
         assert mock_bird.screen_height == mock_screen_size[1]
