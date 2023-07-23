@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, List, Optional, cast
 
 import numpy as np
 
@@ -25,7 +25,6 @@ class Population:
         self.population = population
         self.mutation_rate = mutation_rate
         self.generation = 1
-        self.max_fitness = 0
 
     @property
     def best_member(self) -> Any:
@@ -63,6 +62,16 @@ class Population:
 
         return num_alive
 
+    @property
+    def random_member(self) -> Any:
+        """
+        Returns a random member from the population.
+
+        Returns:
+            (Any): Random member from population
+        """
+        return self.population[np.random.randint(len(self.population))]
+
     def evaluate(self) -> None:
         """
         Calculate the fitness of each member in the population. Then, use the fitnesses of each
@@ -70,21 +79,9 @@ class Population:
         mutation. Once the new genetics have been generated for each member, apply them and reset
         them to their starting conditions i.e. reset their positions.
         """
-        self.max_fitness = self.best_member.fitness
-
         for member in self.population:
-            parentA = None
-            parentB = None
-
-            while parentA is None:
-                potential_parent = self.population[np.random.randint(len(self.population))]
-                if potential_parent != member:
-                    parentA = self.select_parent(potential_parent)
-
-            while parentB is None:
-                potential_parent = self.population[np.random.randint(len(self.population))]
-                if potential_parent != parentA and potential_parent != member:
-                    parentB = self.select_parent(potential_parent)
+            parentA = self.select_parent(member)
+            parentB = self.select_parent(member, parentA)
 
             member.crossover(parentA, parentB, self.mutation_rate)
 
@@ -94,16 +91,31 @@ class Population:
 
         self.generation += 1
 
-    def select_parent(self, parent: Any) -> Optional[Any]:
+    def rejection_sampling(self, member: Any) -> bool:
         """
-        Use Rejection Sampling to select a parent.
+        Use Rejection Sampling to accept or reject a member.
 
         Parameters:
-            parent (Any): Member of population, potential parent for child
+            member (Any): Member to check against algorithm
 
         Returns:
-            parent(Optional(Any)): Member of population if passed Rejection Sampling
+            (bool): True if member passes Rejection sampling.
         """
-        if np.random.uniform(0, 1) < parent.fitness / self.max_fitness:
-            return parent
-        return None
+        return cast(bool, np.random.uniform(0, 1) < member.fitness / self.best_member.fitness)
+
+    def select_parent(self, member: Any, other_parent: Optional[Any] = None) -> Any:
+        """
+        Select a random parent from the population.
+
+        Parameters:
+            member (Any): Member of population to select parents for
+            other_parent (Optional(Any)): Other parent if selected
+
+        Returns:
+            parent(Any): Member of population if passed Rejection Sampling
+        """
+        while True:
+            potential_parent = self.random_member
+            if potential_parent != member and potential_parent != other_parent:
+                if self.rejection_sampling(potential_parent):
+                    return potential_parent

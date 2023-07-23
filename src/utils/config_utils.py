@@ -3,10 +3,10 @@ import os
 from importlib import import_module
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Dict, List
+from typing import Any, Dict, List, cast
 
 
-def get_config(settings_module: str = "") -> ModuleType:
+def get_config_module(settings_module: str = "") -> ModuleType:
     """
     Load configs from janitor/config folder using environment variable.
 
@@ -17,31 +17,10 @@ def get_config(settings_module: str = "") -> ModuleType:
         [ModuleType]: config module, available to use via `config.<param>`
     """
     if not settings_module:
-        settings_module = os.environ["SETTINGS_MODULE"]
+        settings_module = os.environ.get("SETTINGS_MODULE", "src.config.defaults")
 
     config = import_module(settings_module)
     return config
-
-
-def get_wd() -> Path:
-    """
-    Returns path to app.py
-
-    Returns:
-        (Path): Path to app.py
-    """
-    return Path(os.path.realpath(os.path.dirname(__file__))).parent
-
-
-def get_config_folder() -> Path:
-    """
-    Returns path to config folder.
-
-    Returns:
-        (Path): Path to config folder
-    """
-    wd = get_wd()
-    return Path.joinpath(wd, "config")
 
 
 def parse_configs(config_names: List[str], config_values: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -57,7 +36,7 @@ def parse_configs(config_names: List[str], config_values: List[Dict[str, Any]]) 
     return dict(zip(config_names, config_values))
 
 
-def load_json(filepath: str) -> Dict[str, Any]:
+def load_json(filepath: Path) -> Dict[str, Any]:
     """Load json file.
 
     Arguments:
@@ -67,7 +46,7 @@ def load_json(filepath: str) -> Dict[str, Any]:
         (Dict(str, Any)): json values
     """
     with open(filepath, "r") as file:
-        return json.load(file)
+        return cast(Dict[str, Any], json.load(file))
 
 
 def load_configs(config_names: List[str]) -> Dict[str, Any]:
@@ -80,9 +59,9 @@ def load_configs(config_names: List[str]) -> Dict[str, Any]:
         (Dict(str, Any)): Dictionary of config names and settings
     """
     config_values = []
-    config_folder = get_config_folder()
+    config_folder = Path("./src/config")
 
     for name in config_names:
-        config_values.append(load_json(os.path.join(config_folder, f"{name}_config.json")))
+        config_values.append(load_json(config_folder / f"{name}_config.json"))
 
     return parse_configs(config_names, config_values)

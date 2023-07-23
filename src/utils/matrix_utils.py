@@ -1,6 +1,13 @@
 import numpy as np
 
 
+def generate_number():
+    """
+    Generate a random number between 0 and 1.
+    """
+    return np.random.uniform(0, 1)
+
+
 def select_gene(element: float, other_element: float, mutation_rate: float, low: float, high: float) -> float:
     """
     Select a gene between two matrices or a random gene.
@@ -12,7 +19,7 @@ def select_gene(element: float, other_element: float, mutation_rate: float, low:
         low (float): Lower limit for random element
         high (float): Upper limit for random element
     """
-    rng = np.random.uniform(0, 1)
+    rng = generate_number()
     if rng < mutation_rate:
         return np.random.uniform(low, high)
 
