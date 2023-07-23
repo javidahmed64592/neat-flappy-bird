@@ -38,7 +38,8 @@ class App:
         self.screen_height = config.GAME["screen"]["height"]
 
         self.display_surf = pygame.display.set_mode((self.screen_width, self.screen_height))
-        pygame.display.set_caption(config.GAME["name"])
+        self.name = config.GAME["name"]
+        pygame.display.set_caption(self.name)
 
         self.count = 0
 
