@@ -4,6 +4,7 @@ import pygame
 import pytest
 from dotenv import load_dotenv
 
+from src.app import App
 from src.models.ga import Population
 from src.objects.bird import Bird
 from src.objects.pipe import Pipe
@@ -67,3 +68,9 @@ def mock_pipe(mock_config, mock_screen):
 @pytest.fixture
 def mock_population(mock_bird_low_score, mock_bird_mid_score, mock_bird_high_score):
     return Population([mock_bird_low_score, mock_bird_mid_score, mock_bird_high_score])
+
+
+@pytest.fixture
+def mock_app(mock_screen):
+    with patch("pygame.display.get_surface", return_value=mock_screen):
+        return App.create_app(config)
