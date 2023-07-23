@@ -24,9 +24,9 @@ class TestApp:
         mock_app.display_stats()
 
         assert mock_write_text.has_calls(
-            call(f"Generation: 1", 0, 0),
+            call("Generation: 1", 0, 0),
             call(f"Birds alive: {mock_config.GA['population_size']}", 0, mock_config.GAME["font"]["size"]),
-            call(f"Score: 0", 0, mock_config.GAME["font"]["size"] * 2),
+            call("Score: 0", 0, mock_config.GAME["font"]["size"] * 2),
         )
 
     @patch("src.models.ga.Population.evaluate")
