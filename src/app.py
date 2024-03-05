@@ -25,9 +25,7 @@ class App:
         Configure the game window.
 
         Parameters:
-            width (int): Width of game window
-            height (int): Height of game window
-            name (str): Name of game window
+            config (Any): Dictionary of app configuration
         """
         self.config = config
 
