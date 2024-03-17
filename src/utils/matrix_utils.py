@@ -19,11 +19,7 @@ def select_gene(element: float, other_element: float, mutation_rate: float, low:
         low (float): Lower limit for random element
         high (float): Upper limit for random element
     """
-    rng = generate_number()
-    if rng < mutation_rate:
+    if generate_number() < mutation_rate:
         return np.random.uniform(low, high)
 
-    if rng < (0.5 + mutation_rate / 2):
-        return element
-
-    return other_element
+    return np.random.choice([element, other_element])
