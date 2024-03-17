@@ -29,12 +29,12 @@ class TestApp:
             call("Score: 0", 0, mock_config.GAME["font"]["size"] * 2),
         )
 
-    @patch("src.models.ga.Population.evaluate")
+    @patch("src.ga.ga.Population.evaluate")
     def test_given_no_birds_alive_when_updating_and_then_check_population_evaluated(
         self, mock_evaluate, mock_app, mock_config
     ):
         mock_app.count = 1
-        with patch("src.models.ga.Population.num_alive", new_callable=PropertyMock) as mock_num_alive:
+        with patch("src.ga.ga.Population.num_alive", new_callable=PropertyMock) as mock_num_alive:
             mock_num_alive.return_value = 0
             mock_app.update()
             assert mock_evaluate.call_count == 1
@@ -42,7 +42,7 @@ class TestApp:
             assert mock_app.pipe_current_speed == mock_config.PIPE["start_speed"]
             assert mock_app.pipe_current_spawnrate == mock_config.PIPE["start_spawnrate"]
 
-    @patch("src.models.ga.Population.evaluate")
+    @patch("src.ga.ga.Population.evaluate")
     def test_given_max_score_reached_when_updating_then_check_population_evaluated(
         self, mock_evaluate, mock_app, mock_config
     ):

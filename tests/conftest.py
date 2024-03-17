@@ -5,7 +5,7 @@ import pytest
 from dotenv import load_dotenv
 
 from src.app import App
-from src.models.ga import Population
+from src.ga.ga import Population
 from src.objects.bird import Bird
 from src.objects.pipe import Pipe
 from src.utils.config_utils import get_config_module

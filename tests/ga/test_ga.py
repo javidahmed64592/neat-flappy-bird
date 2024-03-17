@@ -21,7 +21,7 @@ class TestGA:
     @patch("src.objects.bird.Bird.reset")
     @patch("src.objects.bird.Bird.apply")
     @patch("src.objects.bird.Bird.crossover")
-    @patch("src.models.ga.Population.select_parent")
+    @patch("src.ga.ga.Population.select_parent")
     def test_given_population_when_evaluating_then_check_birds_evaluated(
         self, mock_select, mock_crossover, mock_apply, mock_reset, mock_population, mock_bird_high_score
     ):
