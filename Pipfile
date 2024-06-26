@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pygame = "~=2.5"
+pygame = "~=2.6"
 numpy = "~=1.25"
 python-dotenv = "~=1.0"
 
